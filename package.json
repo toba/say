@@ -1,0 +1,38 @@
+{
+   "name": "@toba/say",
+   "description": "Toba Internationalization",
+   "version": "1.0.0",
+   "private": false,
+   "publishConfig": {
+      "access": "public"
+   },
+   "main": "lib/index.ts",
+   "types:": "js/index.d.ts",
+   "files": [
+      "lib/**/!(*.test).ts",
+      "js"
+   ],
+   "license": "MIT",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/toba/say"
+   },
+   "bugs": {
+      "url": "https://github.com/toba/say/issues"
+   },
+   "engines": {
+      "node": ">= 10.0.0"
+   },
+   "dependencies": {
+      "@toba/tools": "^4.2.0"
+   },
+   "devDependencies": {
+      "@toba/build": "^2.0.0",
+      "@toba/test": "^2.0.0",
+      "intl": "^1.2.5"
+   },
+   "prettier": {
+      "singleQuote": true,
+      "tabWidth": 3
+   }
+}
