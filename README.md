@@ -3,6 +3,7 @@ https://locize.com/
 https://lokalise.co/
 https://crowdin.com/
 https://www.i18next.com/
+https://medium.com/@jamuhl/i18n-frameworks-the-unfair-showdown-8d436cd6f470
 
 # i18n Tagged Template Literals
 
