@@ -93,108 +93,52 @@ export enum LanguageTag {
    Welsh = 'cy'
 }
 
-const l = LanguageTag;
-
-/**
- * @see http://docs.translatehouse.org/projects/localization-guide/en/latest/l10n/pluralforms.html
- */
-export enum PluralForm {
-   One = 1,
-   Two = 2,
-   Asia = 3,
-   Four = 4,
-   Six = 6,
-   Wales = 8,
-   France = 9,
-   Ireland = 10,
-   Iceland = 12,
-   Romania = 20,
-   TwentyOne = 21,
-   Hebrew = 22
-}
-
 /**
  * Types of plurals supported in different languages.
- * 
+ *
  * `Intl.PluralRules([lang]).select([count])` returns the type for a given
  * language and count.
- * 
+ *
  * English, for example has only two types, `one` and `other`. One item is
  * singular but zero or more than one are plural.
- * 
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/PluralRules#PluralRules_instances
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/PluralRules/select
  * @see https://tc39.github.io/ecma402/#pluralrules-objects
  */
 export enum PluralType {
+   /**
+    * Specific grammar for zero items (as in Arabic and Latvian).
+    */
    Zero = 'zero',
+
+   /**
+    * Specific grammar for one item. Many languages, but not all, use this type.
+    * (Many popular Asian languages, such as Chinese and Japanese, do not.)
+    */
    One = 'one',
+
+   /**
+    * Specific grammar for two items (as in Arabic and Welsh).
+    */
    Two = 'two',
+
+   /**
+    * Specific grammar for a small number of items. For some languages this is
+    * used for 2-4 items, for some 3-10 items, and other languages have even
+    * more complex rules.
+    */
    Few = 'few',
+
+   /**
+    * Specific grammar for a larger number of items (as in Arabic, Polish, and
+    * Russian).
+    */
    Many = 'many',
+
+   /**
+    * Used if the value doesn't match one of the other plural categories. This
+    * is used for "plural" for languages (such as English) that have a simple
+    * "singular" versus "plural" dichotomy.
+    */
    Other = 'other'
 }
-
-interface PluralConfig {
-   tags: LanguageTag[];
-   nr: number[];
-}
-
-/**
- * @see http://docs.translatehouse.org/projects/localization-guide/en/latest/l10n/pluralforms.html?id=l10n/pluralforms
- */
-export const PluralGroups: Map<PluralForm, PluralConfig> = new Map([
-   [
-      PluralForm.One,
-      {
-         tags: [l.Filipino, l.Portuguese, l.PortugueseInBrazil, l.Turkish],
-         nr: [0, 2]
-      }
-   ],
-   [
-      PluralForm.Two,
-      {
-         tags: [
-            l.Danish,
-            l.German,
-            l.Greek,
-            l.English,
-            l.Spanish,
-            l.Estonian,
-            l.Basque,
-            l.Finnish,
-            l.Hindi,
-            l.Hungarian,
-            l.Armenian,
-            l.Italian,
-            l.Norwegian,
-            l.Dutch,
-            l.NorwegianInNynorsk,
-            l.PortugueseInPortugal,
-            l.Swedish
-         ],
-         nr: [1, 2]
-      }
-   ],
-   [
-      PluralForm.Asia,
-      {
-         tags: [l.Persian, l.Indonesian, l.Japanese, l.Thai, l.Chinese],
-         nr: [1]
-      }
-   ],
-   [
-      PluralForm.Four,
-      {
-         tags: [l.Croation, l.Russian],
-         nr: [1, 2, 5]
-      }
-   ],
-   [PluralForm.Six, { tags: [l.Czech, l.Slovak], nr: [1, 2, 5] }],
-   [PluralForm.Wales, { tags: [l.Welsh], nr: [1, 2, 3, 8] }],
-   [PluralForm.France, { tags: [l.French], nr: [1, 2] }],
-   [PluralForm.Ireland, { tags: [l.Irish], nr: [1, 2, 3, 7, 11] }],
-   [PluralForm.Iceland, { tags: [l.Icelandic], nr: [1, 2] }],
-   [PluralForm.Romania, { tags: [l.Romanian], nr: [1, 2, 20] }],
-   [PluralForm.TwentyOne, { tags: [l.Slovenian], nr: [5, 1, 2, 3] }],
-   [PluralForm.Hebrew, { tags: [l.Hebrew], nr: [1, 2, 20, 21] }]
-]);
