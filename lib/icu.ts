@@ -2,7 +2,7 @@ import { is } from '@toba/tools';
 import { AllowedType } from './config';
 import { formatNumber } from './format-number';
 import { formatDate, formatTime } from './format-date';
-import { parse } from './format-plural';
+import { formatPlural } from './format-plural';
 import { Locale } from './constants';
 
 // International Components for Unicode
@@ -10,7 +10,7 @@ import { Locale } from './constants';
 // https://help.phraseapp.com/translate-website-and-app-content/use-icu-message-format/icu-message-format
 // https://medium.com/@jamuhl/we-now-fully-support-icu-format-at-https-locize-com-d2a6775ed06f
 
-export type Formatter<T> = (value: T, locale: Locale) => string;
+export type Formatter<T> = (value: T, locale: Locale | Locale[]) => string;
 
 /**
  * Placeholders found within a template string. A formatter for the type and
@@ -87,7 +87,7 @@ export function parsePlaceholder(
          return formatNumber(format);
       case ValueType.Plural:
          if (is.value(format)) {
-            return parse(format);
+            return formatPlural(format);
          }
       case ValueType.Time:
          return formatTime(format);

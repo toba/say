@@ -1,4 +1,5 @@
 import { is } from '@toba/tools';
+import { Locale } from './';
 import { Formatter } from './icu';
 
 export enum NumberStyle {
@@ -23,16 +24,16 @@ const defaultNumberFormats: Intl.NumberFormatOptions = {
 export function formatNumber(format?: string): Formatter<number> {
    if (is.numeric(format)) {
       const places: number = parseInt(format);
-      return (n: number) =>
-         n.toLocaleString(config.locales, {
+      return (n: number, locale: Locale) =>
+         n.toLocaleString(locale, {
             ...defaultNumberFormats,
             style: NumberStyle.Decimal,
             minimumFractionDigits: places,
             maximumFractionDigits: places
          });
    }
-   return (n: number) =>
-      n.toLocaleString(config.locales, {
+   return (n: number, locale: Locale) =>
+      n.toLocaleString(locale, {
          ...defaultNumberFormats,
          style: NumberStyle.Decimal,
          minimumFractionDigits: 0,

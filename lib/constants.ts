@@ -36,7 +36,7 @@ export enum CurrencyCode {
  * Subset supported in Electron
  * @see https://electronjs.org/docs/api/locales
  */
-export enum LanguageTag {
+export enum Locale {
    Armenian = 'hy',
    Basque = 'eu',
    Chinese = 'zh',
@@ -92,5 +92,3 @@ export enum LanguageTag {
    Turkish = 'tr',
    Welsh = 'cy'
 }
-
-export type Locale = LanguageTag | LanguageTag[];

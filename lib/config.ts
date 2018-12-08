@@ -1,5 +1,5 @@
 import { clone, mergeAll } from '@toba/tools';
-import { CurrencyCode, LanguageTag } from './constants';
+import { CurrencyCode, Locale } from './constants';
 
 /**
  * Basic types supported by standard internationalization library.
@@ -24,11 +24,11 @@ export type StringFormat = any;
  * @see https://github.com/skolmer/es2015-i18n-tag
  */
 export type Formatter<T extends AllowedType> = (
-   locales: string | string[] | undefined,
+   locales: Locale | Locale[] | undefined,
    options: T extends Date
-      ? Intl.DateTimeFormat
+      ? Intl.DateTimeFormatOptions
       : T extends number
-      ? Intl.NumberFormat
+      ? Intl.NumberFormatOptions
       : { [key: string]: StringFormat },
    value: T
 ) => string;
@@ -53,7 +53,7 @@ export interface Configuration {
    /**
     * BCP 47 language tag or tags.
     */
-   locales: LanguageTag | LanguageTag[];
+   locales: Locale | Locale[];
    /**
     * An object that contains translations as key-value-pairs
     */
@@ -80,7 +80,7 @@ export interface Configuration {
 }
 
 const defaultConfig: Configuration = Object.freeze({
-   locales: LanguageTag.English,
+   locales: Locale.English,
    translations: {},
    [BasicType.Number]: {
       currency: CurrencyCode.USDollar

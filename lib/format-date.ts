@@ -1,5 +1,7 @@
+import { is } from '@toba/tools';
 import { Formatter } from './icu';
 import { Locale } from './constants';
+import { isIP } from 'net';
 
 /**
  * Date format name representation.
@@ -99,10 +101,12 @@ const defaultDateFormat: Intl.DateTimeFormatOptions = {
    timeZoneName: undefined
 };
 
+type Options = Map<string, Intl.DateTimeFormatOptions>;
+
 /**
  * Time format configurations.
  */
-export const timeFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
+export const timeFormats: Options = new Map([
    [
       TimeFormat.Short,
       {
@@ -125,7 +129,7 @@ export const timeFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
 /**
  * Date format configurations.
  */
-export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
+export const dateFormats: Options = new Map([
    [
       DateFormat.Short,
       {
@@ -230,13 +234,27 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
 /**
  * Lookup format and build function.
  */
-export function formatDate(format?: DateFormat | string): Formatter<Date> {
-   return (d: Date, locale: Locale) => d.toLocaleString(locale);
-}
+export const formatDate = (format?: DateFormat | string): Formatter<Date> =>
+   makeFormatter(dateFormats, format);
 
 /**
  * Lookup format and build function.
  */
-export function formatTime(format?: DateFormat | string): Formatter<Date> {
-   return (d: Date, locale: Locale) => d.toLocaleString(locale);
+export const formatTime = (format?: DateFormat | string): Formatter<Date> =>
+   makeFormatter(timeFormats, format);
+
+function makeFormatter<T extends DateFormat | TimeFormat | string>(
+   formatList: Options,
+   format?: T
+): Formatter<Date> {
+   let options: Intl.DateTimeFormatOptions | undefined;
+
+   if (!is.empty(format)) {
+      if (formatList.has(format)) {
+         options = formatList.get(format);
+      } else {
+         throw Error(`Format "${format}" is not recognized`);
+      }
+   }
+   return (d: Date, locale: Locale) => d.toLocaleString(locale, options);
 }

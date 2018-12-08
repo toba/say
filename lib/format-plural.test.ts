@@ -1,5 +1,5 @@
 import '@toba/test';
-import { LanguageTag } from './';
+import { Locale } from './';
 import { parse, formatPlural } from './format-plural';
 
 const literal = `You have {itemCount, plural,
@@ -21,7 +21,7 @@ test('converts ICU plural string to rule map', () => {
 
 test('builds format function for plural rules', () => {
    const fn = formatPlural(literal);
-   const en = LanguageTag.English;
+   const en = Locale.English;
    const should: Map<number, string> = new Map([
       [0, 'no items'],
       [1, '1 item'],

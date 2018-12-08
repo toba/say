@@ -1,5 +1,5 @@
 import { Formatter } from './icu';
-import { LanguageTag, Locale } from './constants';
+import { Locale } from './constants';
 
 /**
  * Types of plurals supported in different languages.

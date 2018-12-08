@@ -1,5 +1,5 @@
 import '@toba/test';
-import { CurrencyCode, LanguageTag } from './';
+import { CurrencyCode, Locale } from './';
 import { config, BasicType, configure } from './config';
 
 test('sets default configuration', () => {
@@ -9,11 +9,11 @@ test('sets default configuration', () => {
 });
 
 test('updates configuration', () => {
-   expect(config).toHaveProperty('locales', null);
+   expect(config).toHaveProperty('locales', Locale.English);
 
    configure({
-      locales: LanguageTag.Spanish
+      locales: Locale.Spanish
    });
 
-   expect(config).toHaveProperty('locales', LanguageTag.Spanish);
+   expect(config).toHaveProperty('locales', Locale.Spanish);
 });
