@@ -26,12 +26,6 @@ export enum LocalizeType {
    Percent = 'p'
 }
 
-export enum NumberStyle {
-   Decimal = 'decimal',
-   Currency = 'currency',
-   Percent = 'percent'
-}
-
 /**
  * Localize single value using type information to lookup locally defined
  * localizer method. The value is then substituted back into a template

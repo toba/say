@@ -20,7 +20,12 @@ enum ValueType {
    Date = 'date',
    Time = 'time',
    Plural = 'plural',
-   Number = 'number'
+   Number = 'number',
+   Ordinal = 'ordinal',
+   Duration = 'duration',
+   Spellout = 'spellout',
+   Select = 'select',
+   SelectOrdinal = 'selectordinal'
 }
 
 /**
@@ -41,6 +46,8 @@ export const interleave = (
 /**
  * Parse placeholders from literal.
  * https://formatjs.io/guides/message-syntax/
+ * @see https://format-message.github.io/icu-message-format-for-translators/
+ * @see https://format-message.github.io/icu-message-format-for-translators/editor.html
  * @example
  * 'Your total is {total, number, usd}'
  */
@@ -69,3 +76,6 @@ function parsePlaceholder(token: string): [RegExp, Formatter<AllowedType>] {
    }
    throw Error(`Unsupported type "${type}'`);
 }
+
+// test
+// https://github.com/format-message/format-message/blob/master/packages/format-message-parse/__tests__/index.spec.js

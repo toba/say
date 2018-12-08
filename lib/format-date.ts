@@ -69,13 +69,13 @@ export enum DateFormat {
    //ISO8601also = 'o',
 
    /** @example "2012-12-20T18:00:00.000Z" */
-   ISO8601 = 'O',
+   ISO8601 = 'iso8601',
 
    /** @example "Thu, 20 Dec 2012 18:00:00 GMT" */
    //RFC1123also = 'r',
 
    /** @example "Thu, 20 Dec 2012 18:00:00 GMT" */
-   RFC1123 = 'R',
+   RFC1123 = 'rfc1123',
 
    /** @example "7:00 PM" */
    TimeOnly = 't',
@@ -90,7 +90,7 @@ export enum DateFormat {
    MonthAndYear = 'Y'
 }
 
-const defaultDateStyle: Intl.DateTimeFormatOptions = {
+const defaultDateFormat: Intl.DateTimeFormatOptions = {
    weekday: undefined,
    era: undefined,
    year: undefined,
@@ -109,7 +109,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.ShortDate,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          year: DigitStyle.Numeric,
          month: DigitStyle.Numeric,
          day: DigitStyle.Numeric
@@ -118,7 +118,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.LongDate,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          weekday: NameStyle.Long,
          year: DigitStyle.Numeric,
          month: NameStyle.Long,
@@ -128,7 +128,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.LongDateAndTime,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          weekday: NameStyle.Long,
          year: DigitStyle.Numeric,
          month: NameStyle.Long,
@@ -140,7 +140,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.LongDateAndExactTime,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          weekday: NameStyle.Long,
          year: DigitStyle.Numeric,
          month: NameStyle.Long,
@@ -153,7 +153,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.ShortDateAndTime,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          year: DigitStyle.Numeric,
          month: DigitStyle.Numeric,
          day: DigitStyle.Numeric,
@@ -164,7 +164,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.ShortDateAndExactTime,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          year: DigitStyle.Numeric,
          month: DigitStyle.Numeric,
          day: DigitStyle.Numeric,
@@ -176,7 +176,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.ShortMonthAndDay,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          month: NameStyle.Short,
          day: DigitStyle.Numeric
       }
@@ -184,7 +184,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.MonthAndDay,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          month: NameStyle.Long,
          day: DigitStyle.Numeric
       }
@@ -192,7 +192,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.TimeOnly,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          hour: DigitStyle.Numeric,
          minute: DigitStyle.TwoDigit
       }
@@ -200,7 +200,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.ExactTime,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          hour: DigitStyle.Numeric,
          minute: DigitStyle.TwoDigit,
          second: DigitStyle.TwoDigit
@@ -209,7 +209,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.ShortMonthAndYear,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          year: DigitStyle.Numeric,
          month: NameStyle.Long
       }
@@ -217,7 +217,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
       DateFormat.MonthAndYear,
       {
-         ...defaultDateStyle,
+         ...defaultDateFormat,
          year: DigitStyle.Numeric,
          month: NameStyle.Long
       }
