@@ -92,3 +92,5 @@ export enum LanguageTag {
    Turkish = 'tr',
    Welsh = 'cy'
 }
+
+export type Locale = LanguageTag | LanguageTag[];

@@ -1,5 +1,5 @@
 import { Formatter } from './icu';
-import { LanguageTag } from './constants';
+import { LanguageTag, Locale } from './constants';
 
 /**
  * Types of plurals supported in different languages.
@@ -51,6 +51,20 @@ export enum PluralType {
    Other = 'other'
 }
 
+const re = /(zero|one|two|few|many|other|=\d+)[\r\n\s]+{([^}]+)}/g;
+
+export function parsePlurals(format: string): Map<PluralType | string, string> {
+   re.lastIndex = 0;
+   const plurals: Map<PluralType | string, string> = new Map();
+   let matches: RegExpExecArray | null;
+
+   while ((matches = re.exec(format)) !== null) {
+      const [rule, type, text] = matches;
+      plurals.set(type, text);
+   }
+   return plurals;
+}
+
 /**
  * Lookup style and build function.
  *
@@ -61,20 +75,22 @@ export enum PluralType {
  *    other {# items}
  * }
  */
-export function formatPlural(format: string): Formatter<string> {
-   const plurals = format.split(/\s*{|}[\s\r\n]*/);
-   return (t: string) => t;
+export function formatPlural(format: string): Formatter<number> {
+   const plurals = parsePlurals(format);
+   
+   return (count: number, locale: Locale) => {
+      const exact = '=' + count;
+      let text: string | undefined;
+
+      if (plurals.has(exact)) {
+         text = plurals.get(exact)!;
+      } else {
+         const type = Intl.PluralRules(locale).select(count);
+         text = plurals.get(type);
+      }
+      // TODO: fallback?
+      return text !== undefined
+         ? text.replace('#', count.toLocaleString(locale))
+         : '';
+   };
 }
-
-//interface PluralMap {
-
-// formatjs format
-// https://formatjs.io/guides/message-syntax/
-//
-// You have {itemCount, plural,
-//    =0 {no items}
-//    one {# item}
-//    other {# items}
-// }.
-//
-// Your total is {total, number, usd}

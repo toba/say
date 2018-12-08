@@ -1,5 +1,5 @@
 import { clone, mergeAll } from '@toba/tools';
-import { CurrencyCode } from './constants';
+import { CurrencyCode, LanguageTag } from './constants';
 
 /**
  * Basic types supported by standard internationalization library.
@@ -53,7 +53,7 @@ export interface Configuration {
    /**
     * BCP 47 language tag or tags.
     */
-   locales?: string | string[];
+   locales: LanguageTag | LanguageTag[];
    /**
     * An object that contains translations as key-value-pairs
     */
@@ -80,7 +80,7 @@ export interface Configuration {
 }
 
 const defaultConfig: Configuration = Object.freeze({
-   locales: undefined,
+   locales: LanguageTag.English,
    translations: {},
    [BasicType.Number]: {
       currency: CurrencyCode.USDollar

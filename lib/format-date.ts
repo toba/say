@@ -1,4 +1,5 @@
 import { Formatter } from './icu';
+import { Locale } from './constants';
 
 /**
  * Date format name representation.
@@ -42,52 +43,48 @@ export enum DigitStyle {
  */
 export enum DateFormat {
    /** @example "2/20/2012" */
-   ShortDate = 'd',
+   Short = 'short',
 
    /** @example "Thursday, December 20, 2012" */
-   LongDate = 'D',
+   Long = 'long',
 
    /** @example "Thursday, December 20, 2012, 7:00 PM" */
-   LongDateAndTime = 'f',
+   LongWithTime = 'longWithTime',
 
    /** @example "Thursday, December 20, 2012, 7:00:00 PM" */
-   LongDateAndExactTime = 'F',
+   LongWithExactTime = 'longWithExactTime',
 
    /** @example "12/20/2012, 7:00 PM" */
-   ShortDateAndTime = 'g',
+   ShortWithTime = 'shortWithTime',
 
    /** @example "12/20/2012, 7:00:00 PM" */
-   ShortDateAndExactTime = 'G',
+   ShortWithExactTime = 'shortWithExactTime',
 
    /** @example "Dec 20" */
-   ShortMonthAndDay = 'm',
+   ShortMonthAndDay = 'shortMonthDay',
 
    /** @example "December 20" */
-   MonthAndDay = 'M',
-
-   /** @example "2012-12-20T18:00:00.000Z" */
-   //ISO8601also = 'o',
+   MonthAndDay = 'monthDay',
 
    /** @example "2012-12-20T18:00:00.000Z" */
    ISO8601 = 'iso8601',
 
    /** @example "Thu, 20 Dec 2012 18:00:00 GMT" */
-   //RFC1123also = 'r',
-
-   /** @example "Thu, 20 Dec 2012 18:00:00 GMT" */
    RFC1123 = 'rfc1123',
 
-   /** @example "7:00 PM" */
-   TimeOnly = 't',
-
-   /** @example "7:00:00 PM" */
-   ExactTime = 'T',
-
    /** @example "Dec 2012" */
-   ShortMonthAndYear = 'y',
+   ShortMonthAndYear = 'shortMonthYear',
 
    /** @example "December 2012" */
-   MonthAndYear = 'Y'
+   MonthAndYear = 'monthYear'
+}
+
+export enum TimeFormat {
+   /** @example "7:00 PM" */
+   Short = 'short',
+
+   /** @example "7:00:00 PM" */
+   Long = 'long'
 }
 
 const defaultDateFormat: Intl.DateTimeFormatOptions = {
@@ -103,11 +100,34 @@ const defaultDateFormat: Intl.DateTimeFormatOptions = {
 };
 
 /**
+ * Time format configurations.
+ */
+export const timeFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
+   [
+      TimeFormat.Short,
+      {
+         ...defaultDateFormat,
+         hour: DigitStyle.Numeric,
+         minute: DigitStyle.TwoDigit
+      }
+   ],
+   [
+      TimeFormat.Long,
+      {
+         ...defaultDateFormat,
+         hour: DigitStyle.Numeric,
+         minute: DigitStyle.TwoDigit,
+         second: DigitStyle.TwoDigit
+      }
+   ]
+]);
+
+/**
  * Date format configurations.
  */
 export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
-      DateFormat.ShortDate,
+      DateFormat.Short,
       {
          ...defaultDateFormat,
          year: DigitStyle.Numeric,
@@ -116,7 +136,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
       }
    ],
    [
-      DateFormat.LongDate,
+      DateFormat.Long,
       {
          ...defaultDateFormat,
          weekday: NameStyle.Long,
@@ -126,7 +146,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
       }
    ],
    [
-      DateFormat.LongDateAndTime,
+      DateFormat.LongWithTime,
       {
          ...defaultDateFormat,
          weekday: NameStyle.Long,
@@ -138,7 +158,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
       }
    ],
    [
-      DateFormat.LongDateAndExactTime,
+      DateFormat.LongWithExactTime,
       {
          ...defaultDateFormat,
          weekday: NameStyle.Long,
@@ -151,7 +171,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
       }
    ],
    [
-      DateFormat.ShortDateAndTime,
+      DateFormat.ShortWithTime,
       {
          ...defaultDateFormat,
          year: DigitStyle.Numeric,
@@ -162,7 +182,7 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
       }
    ],
    [
-      DateFormat.ShortDateAndExactTime,
+      DateFormat.ShortWithExactTime,
       {
          ...defaultDateFormat,
          year: DigitStyle.Numeric,
@@ -190,23 +210,6 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
       }
    ],
    [
-      DateFormat.TimeOnly,
-      {
-         ...defaultDateFormat,
-         hour: DigitStyle.Numeric,
-         minute: DigitStyle.TwoDigit
-      }
-   ],
-   [
-      DateFormat.ExactTime,
-      {
-         ...defaultDateFormat,
-         hour: DigitStyle.Numeric,
-         minute: DigitStyle.TwoDigit,
-         second: DigitStyle.TwoDigit
-      }
-   ],
-   [
       DateFormat.ShortMonthAndYear,
       {
          ...defaultDateFormat,
@@ -227,13 +230,13 @@ export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
 /**
  * Lookup format and build function.
  */
-export function formatDate(format: DateFormat | string): Formatter<Date> {
-   return (d: Date) => d.toLocaleString('en');
+export function formatDate(format?: DateFormat | string): Formatter<Date> {
+   return (d: Date, locale: Locale) => d.toLocaleString(locale);
 }
 
 /**
  * Lookup format and build function.
  */
-export function formatTime(format: DateFormat | string): Formatter<Date> {
-   return (d: Date) => d.toLocaleString('en');
+export function formatTime(format?: DateFormat | string): Formatter<Date> {
+   return (d: Date, locale: Locale) => d.toLocaleString(locale);
 }

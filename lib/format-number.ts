@@ -20,7 +20,7 @@ const defaultNumberFormats: Intl.NumberFormatOptions = {
 /**
  * Lookup style and build function.
  */
-export function formatNumber(format: string): Formatter<number> {
+export function formatNumber(format?: string): Formatter<number> {
    if (is.numeric(format)) {
       const places: number = parseInt(format);
       return (n: number) =>
