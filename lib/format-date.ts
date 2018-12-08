@@ -251,7 +251,7 @@ function makeFormatter<T extends DateFormat | TimeFormat | string>(
       if (formatList.has(format)) {
          options = formatList.get(format);
       } else {
-         throw Error(`Format "${format}" is not recognized`);
+         throw Error(`Date/time format "${format}" is not recognized`);
       }
    }
    return (d: Date, locale: Locale) => d.toLocaleString(locale, options);

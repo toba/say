@@ -27,7 +27,8 @@ test('accepts numeric parameter to control decimal places', () => {
 test('accepts currency parameter', () => {
    const should: Map<string, string> = new Map([
       ['usd', '$23.10'],
-      ['eur', '€23.10']
+      ['eur', '€23.10'],
+      ['aud', 'A$23.10']
    ]);
 
    should.forEach((out, currency) => {

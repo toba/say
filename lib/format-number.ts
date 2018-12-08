@@ -83,7 +83,12 @@ export function formatNumber(format?: string): Formatter<number> {
          minimumFractionDigits: 2,
          maximumFractionDigits: 2
       };
+   } else if (!is.empty(format)) {
+      if (numberFormats.has(format)) {
+         options = numberFormats.get(format)!;
+      } else {
+         throw Error(`Number format "${format}" is not recognized`);
+      }
    }
-
    return (n: number, locale: Locale) => n.toLocaleString(locale, options);
 }
