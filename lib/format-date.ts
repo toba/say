@@ -1,10 +1,9 @@
 import { is } from '@toba/tools';
 import { Formatter } from './icu';
 import { Locale } from './constants';
-import { isIP } from 'net';
 
 /**
- * Date format name representation.
+ * Date format name representation within `Intl` library.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
  */
 export enum NameStyle {
@@ -29,6 +28,9 @@ export enum NameStyle {
    Full = 'full'
 }
 
+/**
+ * Date digit style within `Intl` library.
+ */
 export enum DigitStyle {
    /** Number is shown without leading zeros. */
    Numeric = 'numeric',
@@ -37,11 +39,7 @@ export enum DigitStyle {
 }
 
 /**
- * Style labels that can be used as an argument to the `date` `LocalizeType`
- * suffix on a template string token to indicate specific formatting.
- * @example
- * `text ${value}:[LocalizeType]([DateStyle]) text`
- * `text ${value}:t(G) text`
+ *
  */
 export enum DateFormat {
    /** @example "2/20/2012" */
@@ -89,7 +87,7 @@ export enum TimeFormat {
    Long = 'long'
 }
 
-const defaultDateFormat: Intl.DateTimeFormatOptions = {
+const defaultOptions: Intl.DateTimeFormatOptions = {
    weekday: undefined,
    era: undefined,
    year: undefined,
@@ -101,16 +99,16 @@ const defaultDateFormat: Intl.DateTimeFormatOptions = {
    timeZoneName: undefined
 };
 
-type Options = Map<string, Intl.DateTimeFormatOptions>;
+type FormatOptions = Map<string, Intl.DateTimeFormatOptions>;
 
 /**
  * Time format configurations.
  */
-export const timeFormats: Options = new Map([
+export const timeFormats: FormatOptions = new Map([
    [
       TimeFormat.Short,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          hour: DigitStyle.Numeric,
          minute: DigitStyle.TwoDigit
       }
@@ -118,7 +116,7 @@ export const timeFormats: Options = new Map([
    [
       TimeFormat.Long,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          hour: DigitStyle.Numeric,
          minute: DigitStyle.TwoDigit,
          second: DigitStyle.TwoDigit
@@ -129,11 +127,11 @@ export const timeFormats: Options = new Map([
 /**
  * Date format configurations.
  */
-export const dateFormats: Options = new Map([
+export const dateFormats: FormatOptions = new Map([
    [
       DateFormat.Short,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          year: DigitStyle.Numeric,
          month: DigitStyle.Numeric,
          day: DigitStyle.Numeric
@@ -142,7 +140,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.Long,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          weekday: NameStyle.Long,
          year: DigitStyle.Numeric,
          month: NameStyle.Long,
@@ -152,7 +150,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.LongWithTime,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          weekday: NameStyle.Long,
          year: DigitStyle.Numeric,
          month: NameStyle.Long,
@@ -164,7 +162,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.LongWithExactTime,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          weekday: NameStyle.Long,
          year: DigitStyle.Numeric,
          month: NameStyle.Long,
@@ -177,7 +175,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.ShortWithTime,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          year: DigitStyle.Numeric,
          month: DigitStyle.Numeric,
          day: DigitStyle.Numeric,
@@ -188,7 +186,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.ShortWithExactTime,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          year: DigitStyle.Numeric,
          month: DigitStyle.Numeric,
          day: DigitStyle.Numeric,
@@ -200,7 +198,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.ShortMonthAndDay,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          month: NameStyle.Short,
          day: DigitStyle.Numeric
       }
@@ -208,7 +206,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.MonthAndDay,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          month: NameStyle.Long,
          day: DigitStyle.Numeric
       }
@@ -216,7 +214,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.ShortMonthAndYear,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          year: DigitStyle.Numeric,
          month: NameStyle.Long
       }
@@ -224,7 +222,7 @@ export const dateFormats: Options = new Map([
    [
       DateFormat.MonthAndYear,
       {
-         ...defaultDateFormat,
+         ...defaultOptions,
          year: DigitStyle.Numeric,
          month: NameStyle.Long
       }
@@ -244,7 +242,7 @@ export const formatTime = (format?: DateFormat | string): Formatter<Date> =>
    makeFormatter(timeFormats, format);
 
 function makeFormatter<T extends DateFormat | TimeFormat | string>(
-   formatList: Options,
+   formatList: FormatOptions,
    format?: T
 ): Formatter<Date> {
    let options: Intl.DateTimeFormatOptions | undefined;

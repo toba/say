@@ -1,7 +1,10 @@
 import { is } from '@toba/tools';
-import { Locale } from './';
+import { Locale, CurrencyCode } from './';
 import { Formatter } from './icu';
 
+/**
+ * Possible values of `style` property on `Intl.NumberFormatOptions`.
+ */
 export enum NumberStyle {
    Decimal = 'decimal',
    Currency = 'currency',
@@ -9,34 +12,78 @@ export enum NumberStyle {
 }
 
 /**
- * Number format configurations.
+ * Possible values of `currencyDisplay` property on `Intl.NumberFormatOptions`.
  */
-export const numberFormats: Map<string, Intl.NumberFormatOptions> = new Map();
+export enum CurrencyDisplay {
+   /** Use a localized currency symbol such as € (the default) */
+   Symbol = 'symbol',
+   /** Use the ISO currency code */
+   Code = 'code',
+   /** Use a localized currency name such as "dollar" */
+   Name = 'name'
+}
 
-const defaultNumberFormats: Intl.NumberFormatOptions = {
+type FormatOptions = Map<string, Intl.NumberFormatOptions>;
+
+/**
+ * Number format configurations.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
+ */
+export const numberFormats: FormatOptions = new Map();
+
+const defaultOptions: Intl.NumberFormatOptions = {
    minimumFractionDigits: 0,
    maximumFractionDigits: 3
+};
+
+/**
+ * Regular expression to match all supported currency codes.
+ * @example
+ * /^(USD|EUR)$/i
+ */
+let currencyPattern: RegExp;
+let patternReady = false;
+
+export const isCurrencyCode = (code?: string): code is string => {
+   if (!patternReady) {
+      currencyPattern = new RegExp(
+         `^(${Object.values(CurrencyCode).join('|')})$`,
+         'i'
+      );
+      patternReady = true;
+   }
+   return code === undefined ? false : currencyPattern.test(code);
 };
 
 /**
  * Lookup style and build function.
  */
 export function formatNumber(format?: string): Formatter<number> {
+   let options = defaultOptions;
+
    if (is.numeric(format)) {
       const places: number = parseInt(format);
-      return (n: number, locale: Locale) =>
-         n.toLocaleString(locale, {
-            ...defaultNumberFormats,
-            style: NumberStyle.Decimal,
-            minimumFractionDigits: places,
-            maximumFractionDigits: places
-         });
+      options = {
+         ...options,
+         minimumFractionDigits: places,
+         maximumFractionDigits: places
+      };
+   } else if (isCurrencyCode(format)) {
+      options = {
+         ...options,
+         style: NumberStyle.Currency,
+         currency: format,
+         minimumFractionDigits: 2,
+         maximumFractionDigits: 2
+      };
+   } else if (format === NumberStyle.Currency) {
+      options = {
+         ...options,
+         style: NumberStyle.Currency,
+         minimumFractionDigits: 2,
+         maximumFractionDigits: 2
+      };
    }
-   return (n: number, locale: Locale) =>
-      n.toLocaleString(locale, {
-         ...defaultNumberFormats,
-         style: NumberStyle.Decimal,
-         minimumFractionDigits: 0,
-         maximumFractionDigits: 3
-      });
+
+   return (n: number, locale: Locale) => n.toLocaleString(locale, options);
 }

@@ -33,8 +33,11 @@ export enum CurrencyCode {
 /**
  * BCP 47 language tags.
  * @see https://tools.ietf.org/html/rfc5646
- * Subset supported in Electron
+ *
+ * Subset supported in Electron:
  * @see https://electronjs.org/docs/api/locales
+ * Subset supported in VSCode:
+ * @see https://github.com/Microsoft/Localization/wiki/Visual-Studio-Code-Community-Localization-Project#9-core-languages
  */
 export enum Locale {
    Armenian = 'hy',
