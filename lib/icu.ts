@@ -1,9 +1,9 @@
 import { is } from '@toba/tools';
-import { AllowedType, config } from './config';
+import { AllowedType } from './config';
 import { formatNumber } from './format-number';
 import { formatDate, formatTime } from './format-date';
-import { formatPlural } from './format-plural';
-import { LanguageTag, Locale } from './constants';
+import { parse } from './format-plural';
+import { Locale } from './constants';
 
 // International Components for Unicode
 // https://blog.crowdin.com/2016/11/09/icu-syntax-in-crowdin/
@@ -16,7 +16,7 @@ export type Formatter<T> = (value: T, locale: Locale) => string;
  * Placeholders found within a template string. A formatter for the type and
  * format is paired with the string matching the full placeholder which is keyed
  * to the placeholder key.
- * 
+ *
  * @example
  * "text {key, type, format} more text"
  * => Map<'key', ['{key, type, format}', parsePlaceholder(type, format)]>
@@ -45,21 +45,6 @@ const cache: Map<string, Placeholders> = new Map();
  * {key3, type3}
  */
 const re = /{(\w+)(,\s+(\w+)(,\s+(\w+))?)?}/g;
-
-/**
- * Substitute values into keyed placeholders within string literal.
- * @example
- * interleave('{0} {1}!', 'hello', 'world') == 'hello world!'
- */
-export const interleave = (
-   template: string,
-   values: { [key: string]: AllowedType }
-): string => {
-   for (const key in values) {
-      template.replace(new RegExp(`{${key}[^}]+}`), values[key].toString());
-   }
-   return template;
-};
 
 /**
  * Parse placeholders from literal.
@@ -102,7 +87,7 @@ export function parsePlaceholder(
          return formatNumber(format);
       case ValueType.Plural:
          if (is.value(format)) {
-            return formatPlural(format);
+            return parse(format);
          }
       case ValueType.Time:
          return formatTime(format);

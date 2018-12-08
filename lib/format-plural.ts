@@ -52,8 +52,19 @@ export enum PluralType {
 }
 
 const re = /(zero|one|two|few|many|other|=\d+)[\r\n\s]+{([^}]+)}/g;
+const ruleCache: Map<Locale, Intl.PluralRules> = new Map();
 
-export function parsePlurals(format: string): Map<PluralType | string, string> {
+/**
+ * Parse map of plural rules from ICU format string.
+ *
+ * @example
+ * You have {itemCount, plural,
+ *    =0 {no items}
+ *    one {# item}
+ *    other {# items}
+ * }
+ */
+export function parse(format: string): Map<PluralType | string, string> {
    re.lastIndex = 0;
    const plurals: Map<PluralType | string, string> = new Map();
    let matches: RegExpExecArray | null;
@@ -63,6 +74,21 @@ export function parsePlurals(format: string): Map<PluralType | string, string> {
       plurals.set(type, text);
    }
    return plurals;
+}
+
+/**
+ * Retrieve pluralization rules from cache or from `Intl` library.
+ */
+function getRules(
+   locale: Locale,
+   options?: Intl.PluralRulesOptions
+): Intl.PluralRules {
+   if (ruleCache.has(locale)) {
+      return ruleCache.get(locale)!;
+   }
+   const rules = new Intl.PluralRules(locale, options);
+   ruleCache.set(locale, rules);
+   return rules;
 }
 
 /**
@@ -76,8 +102,8 @@ export function parsePlurals(format: string): Map<PluralType | string, string> {
  * }
  */
 export function formatPlural(format: string): Formatter<number> {
-   const plurals = parsePlurals(format);
-   
+   const plurals = parse(format);
+
    return (count: number, locale: Locale) => {
       const exact = '=' + count;
       let text: string | undefined;
@@ -85,7 +111,8 @@ export function formatPlural(format: string): Formatter<number> {
       if (plurals.has(exact)) {
          text = plurals.get(exact)!;
       } else {
-         const type = Intl.PluralRules(locale).select(count);
+         const rules = getRules(locale);
+         const type = rules.select(count);
          text = plurals.get(type);
       }
       // TODO: fallback?
