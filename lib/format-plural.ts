@@ -62,6 +62,7 @@ export enum PluralType {
  * }
  */
 export function formatPlural(format: string): Formatter<string> {
+   const plurals = format.split(/\s*{|}[\s\r\n]*/);
    return (t: string) => t;
 }
 
