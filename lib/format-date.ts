@@ -1,3 +1,5 @@
+import { Formatter } from './icu';
+
 /**
  * Date format name representation.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
@@ -38,7 +40,7 @@ export enum DigitStyle {
  * `text ${value}:[LocalizeType]([DateStyle]) text`
  * `text ${value}:t(G) text`
  */
-export enum DateStyle {
+export enum DateFormat {
    /** @example "2/20/2012" */
    ShortDate = 'd',
 
@@ -103,12 +105,9 @@ const defaultDateStyle: Intl.DateTimeFormatOptions = {
 /**
  * Date format configurations.
  */
-export const dateStyleOptions: Map<
-   string,
-   Intl.DateTimeFormatOptions
-> = new Map([
+export const dateFormats: Map<string, Intl.DateTimeFormatOptions> = new Map([
    [
-      DateStyle.ShortDate,
+      DateFormat.ShortDate,
       {
          ...defaultDateStyle,
          year: DigitStyle.Numeric,
@@ -117,7 +116,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.LongDate,
+      DateFormat.LongDate,
       {
          ...defaultDateStyle,
          weekday: NameStyle.Long,
@@ -127,7 +126,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.LongDateAndTime,
+      DateFormat.LongDateAndTime,
       {
          ...defaultDateStyle,
          weekday: NameStyle.Long,
@@ -139,7 +138,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.LongDateAndExactTime,
+      DateFormat.LongDateAndExactTime,
       {
          ...defaultDateStyle,
          weekday: NameStyle.Long,
@@ -152,7 +151,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.ShortDateAndTime,
+      DateFormat.ShortDateAndTime,
       {
          ...defaultDateStyle,
          year: DigitStyle.Numeric,
@@ -163,7 +162,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.ShortDateAndExactTime,
+      DateFormat.ShortDateAndExactTime,
       {
          ...defaultDateStyle,
          year: DigitStyle.Numeric,
@@ -175,7 +174,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.ShortMonthAndDay,
+      DateFormat.ShortMonthAndDay,
       {
          ...defaultDateStyle,
          month: NameStyle.Short,
@@ -183,7 +182,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.MonthAndDay,
+      DateFormat.MonthAndDay,
       {
          ...defaultDateStyle,
          month: NameStyle.Long,
@@ -191,7 +190,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.TimeOnly,
+      DateFormat.TimeOnly,
       {
          ...defaultDateStyle,
          hour: DigitStyle.Numeric,
@@ -199,7 +198,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.ExactTime,
+      DateFormat.ExactTime,
       {
          ...defaultDateStyle,
          hour: DigitStyle.Numeric,
@@ -208,7 +207,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.ShortMonthAndYear,
+      DateFormat.ShortMonthAndYear,
       {
          ...defaultDateStyle,
          year: DigitStyle.Numeric,
@@ -216,7 +215,7 @@ export const dateStyleOptions: Map<
       }
    ],
    [
-      DateStyle.MonthAndYear,
+      DateFormat.MonthAndYear,
       {
          ...defaultDateStyle,
          year: DigitStyle.Numeric,
@@ -224,3 +223,17 @@ export const dateStyleOptions: Map<
       }
    ]
 ]);
+
+/**
+ * Lookup format and build function.
+ */
+export function formatDate(format: DateFormat | string): Formatter<Date> {
+   return (d: Date) => d.toLocaleString('en');
+}
+
+/**
+ * Lookup format and build function.
+ */
+export function formatTime(format: DateFormat | string): Formatter<Date> {
+   return (d: Date) => d.toLocaleString('en');
+}

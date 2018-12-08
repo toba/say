@@ -1,6 +1,6 @@
 import '@toba/test';
-import { dateStyleOptions, DateStyle } from './date-format';
-import { LanguageTag } from './';
+import { dateStyleOptions, DateStyle } from './format-date';
+import { LanguageTag } from '.';
 
 test('defines options for each custom format abbreviation', () => {
    expect(dateStyleOptions).toHaveKeys(

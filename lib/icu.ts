@@ -1,19 +1,20 @@
+import { is } from '@toba/tools';
 import { AllowedType } from './config';
+import { formatNumber } from './format-number';
+import { formatDate, formatTime } from './format-date';
+import { formatPlural } from './format-plural';
 
 // International Components for Unicode
 // https://blog.crowdin.com/2016/11/09/icu-syntax-in-crowdin/
 // https://help.phraseapp.com/translate-website-and-app-content/use-icu-message-format/icu-message-format
 // https://medium.com/@jamuhl/we-now-fully-support-icu-format-at-https-locize-com-d2a6775ed06f
 
-type Formatter = (value: AllowedType) => string;
-type MakeFormatter<U> = (style: U) => Formatter;
-type Placeholders<T> = Map<RegExp, Formatter>;
-
-interface Placeholder<T> {
-   key: string;
-   re: RegExp;
-   fn: Formatter;
-}
+export type Formatter<T> = (value: T) => string;
+//type MakeFormatter<U> = (style: U) => Formatter;
+/**
+ * Placeholders found within a template string.
+ */
+type Placeholders = Map<RegExp, Formatter<AllowedType>>;
 
 enum ValueType {
    Date = 'date',
@@ -43,10 +44,28 @@ export const interleave = (
  * @example
  * 'Your total is {total, number, usd}'
  */
-function parse<T>(literal: string): Map<string, Placeholders<T>> | null {
+function parse(literal: string): Map<string, Placeholders> | null {
    return null;
 }
 
-function parsePlaceholder(token: string): [RegExp, Formatter] {
-   return [];
+/**
+ * Compile key matcher and formatter for ICU message placeholder. This will be
+ * cached so different values can quickly be interpolated with the same format
+ * string.
+ */
+function parsePlaceholder(token: string): [RegExp, Formatter<AllowedType>] {
+   const [key, type, format] = token.split(',');
+   const re = new RegExp(`{${key}[^}]+}`);
+
+   switch (type) {
+      case ValueType.Date:
+         return [re, formatDate(format)];
+      case ValueType.Number:
+         return [re, formatNumber(format)];
+      case ValueType.Plural:
+         return [re, formatPlural(format)];
+      case ValueType.Time:
+         return [re, formatTime(format)];
+   }
+   throw Error(`Unsupported type "${type}'`);
 }

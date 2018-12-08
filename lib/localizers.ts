@@ -1,6 +1,6 @@
 import { is, mergeAll, clone } from '@toba/tools';
 import { TypeInfo } from './type-info';
-import { DateStyle, dateStyleOptions } from './date-format';
+import { DateFormat, dateFormats } from './format-date';
 import {
    config,
    BasicType,
@@ -78,7 +78,7 @@ export function assertType(type: LocalizeType, v: AllowedType) {
  */
 export function applyStyleFormat<T extends AllowedType>(
    type: BasicType,
-   style: DateStyle | string,
+   style: DateFormat | string,
    value: T
 ): string | null {
    if (!is.object<BasicTypeStyles>(config.formatters)) {
@@ -147,20 +147,20 @@ localizers
       });
    })
 
-   .set(LocalizeType.Date, (d: Date, style: DateStyle) => {
+   .set(LocalizeType.Date, (d: Date, style: DateFormat) => {
       assertType(LocalizeType.Date, d);
 
       if (is.value(style)) {
          switch (style.toUpperCase()) {
-            case DateStyle.RFC1123:
+            case DateFormat.RFC1123:
                return d.toUTCString();
-            case DateStyle.ISO8601:
+            case DateFormat.ISO8601:
                return d.toISOString();
          }
 
-         if (dateStyleOptions.has(style)) {
+         if (dateFormats.has(style)) {
             // standard style has been defined
-            const options = dateStyleOptions.get(style)!;
+            const options = dateFormats.get(style)!;
 
             return d.toLocaleString(
                config.locales,
