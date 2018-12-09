@@ -1,5 +1,5 @@
-import { Formatter } from './say';
-import { Locale } from './constants';
+import { Formatter } from '../say';
+import { Locale } from '../constants';
 
 /**
  * Types of plurals supported in different languages.
@@ -51,7 +51,7 @@ export enum PluralType {
    Other = 'other'
 }
 
-const re = /(zero|one|two|few|many|other|=\d+)[\r\n\s]+{([^}]+)}/g;
+const re = /(zero|one|two|few|many|other|=\d+)[\r\n\s]*{([^}]+)}/g;
 const ruleCache: Map<Locale, Intl.PluralRules> = new Map();
 
 /**

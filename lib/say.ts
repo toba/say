@@ -1,15 +1,10 @@
 import { is } from '@toba/tools';
 import { AllowedType } from './config';
-import { formatNumber } from './format-number';
-import { formatDate, formatTime } from './format-date';
-import { formatPlural } from './format-plural';
+import { formatNumber } from './format/number';
+import { formatDate, formatTime } from './format/date';
+import { formatPlural } from './format/plural';
 import { Locale } from './constants';
 import { getTranslation } from './translation';
-
-// International Components for Unicode
-// https://blog.crowdin.com/2016/11/09/icu-syntax-in-crowdin/
-// https://help.phraseapp.com/translate-website-and-app-content/use-icu-message-format/icu-message-format
-// https://medium.com/@jamuhl/we-now-fully-support-icu-format-at-https-locize-com-d2a6775ed06f
 
 export type Formatter<T> = (value: T, locale: Locale | Locale[]) => string;
 

@@ -1,6 +1,6 @@
 import '@toba/test';
-import { Locale } from './';
-import { formatNumber, isCurrencyCode } from './format-number';
+import { Locale } from '..';
+import { formatNumber, isCurrencyCode } from './number';
 
 test('identifies currency codes', () => {
    ['usd'].forEach(code => {

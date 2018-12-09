@@ -1,6 +1,6 @@
 import { is } from '@toba/tools';
-import { Formatter } from './say';
-import { Locale } from './constants';
+import { Formatter } from '../say';
+import { Locale } from '../constants';
 
 /**
  * Date format name representation within `Intl` library.

@@ -5,8 +5,8 @@ import {
    timeFormats,
    TimeFormat,
    formatDate
-} from './format-date';
-import { Locale } from './';
+} from './date';
+import { Locale } from '..';
 
 /**
  * For testing purposes, the date creation and `toString` methods all use UTC.

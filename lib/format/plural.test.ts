@@ -1,6 +1,6 @@
 import '@toba/test';
-import { Locale } from './';
-import { parse, formatPlural } from './format-plural';
+import { Locale } from '..';
+import { parse, formatPlural } from './plural';
 
 const literal = `You have {itemCount, plural,
    =0 {no items}
@@ -9,9 +9,11 @@ other {# items}
 }`;
 
 test('converts ICU plural string to rule map', () => {
+   // spacing variations
    [
       literal,
-      'You have {itemCount, plural, =0 {no items} one {# item} other {# items}'
+      'You have {itemCount, plural, =0 {no items} one {# item} other {# items}',
+      'You have {itemCount, plural, =0{no items} one{# item} other{# items}'
    ].forEach(l => {
       const map = parse(l);
       expect(map).toHaveKeys('=0', 'one', 'other');
