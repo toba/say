@@ -3,18 +3,27 @@ import {
    dateFormats,
    DateFormat,
    timeFormats,
-   TimeFormat
+   TimeFormat,
+   formatDate
 } from './format-date';
 import { Locale } from './';
 
-const d = new Date(2012, 11, 20, 19, 0, 0, 0);
+/**
+ * For testing purposes, the date creation and `toString` methods all use UTC.
+ */
+const d = new Date(Date.UTC(2012, 11, 20, 19, 0, 0, 0));
 
 test('defines options for each date format abbreviation', () => {
    expect(dateFormats).toHaveKeys(
       ...Object.keys(DateFormat)
          .map(key => DateFormat[key])
          .filter(
-            code => ![DateFormat.ISO8601, DateFormat.RFC1123].includes(code)
+            code =>
+               ![
+                  DateFormat.ISO8601,
+                  DateFormat.RFC1123,
+                  DateFormat.Timestamp
+               ].includes(code)
          )
    );
 });
@@ -35,17 +44,31 @@ test('formats date according to named style', () => {
       [DateFormat.ShortWithExactTime, '12/20/2012, 7:00:00 PM'],
       //[DateStyle.ShortMonthAndDay, 'Dec 20'],
       [DateFormat.MonthAndDay, 'December 20'],
-      //[DateStyle.ISO8601, '2012-12-20T18:00:00.000Z'],
-      //[DateStyle.RFC1123, 'Thu, 20 Dec 2012 18:00:00 GMT'],
-      //[DateStyle.ShortMonthAndYear, 'Dec 2012'],
       [DateFormat.MonthAndYear, 'December 2012']
    ]);
 
    should.forEach((value, key) => {
       expect(dateFormats.has(key)).toBe(true);
-      expect(d.toLocaleString(Locale.English, dateFormats.get(key))).toBe(
-         value
-      );
+      expect(
+         d.toLocaleString(Locale.English, {
+            ...dateFormats.get(key),
+            timeZone: 'UTC'
+         })
+      ).toBe(value);
+   });
+});
+
+test('formats date with named built-in methods', () => {
+   const should: Map<DateFormat, string> = new Map([
+      [DateFormat.ISO8601, '2012-12-20T19:00:00.000Z'],
+      [DateFormat.RFC1123, 'Thu, 20 Dec 2012 19:00:00 GMT'],
+      [DateFormat.Timestamp, '1356030000000']
+   ]);
+
+   should.forEach((value, key) => {
+      const fn = formatDate(key);
+      expect(dateFormats.has(key)).toBe(false);
+      expect(fn(d, Locale.English)).toBe(value);
    });
 });
 
@@ -57,8 +80,11 @@ test('formats time according to named style', () => {
 
    should.forEach((value, key) => {
       expect(timeFormats.has(key)).toBe(true);
-      expect(d.toLocaleString(Locale.English, timeFormats.get(key))).toBe(
-         value
-      );
+      expect(
+         d.toLocaleString(Locale.English, {
+            ...timeFormats.get(key),
+            timeZone: 'UTC'
+         })
+      ).toBe(value);
    });
 });

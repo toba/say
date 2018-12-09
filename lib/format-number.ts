@@ -25,16 +25,24 @@ export enum CurrencyDisplay {
 
 type FormatOptions = Map<string, Intl.NumberFormatOptions>;
 
-/**
- * Number format configurations.
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
- */
-export const numberFormats: FormatOptions = new Map();
-
 const defaultOptions: Intl.NumberFormatOptions = {
    minimumFractionDigits: 0,
    maximumFractionDigits: 3
 };
+
+/**
+ * Number format configurations.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
+ */
+export const numberFormats: FormatOptions = new Map([
+   [
+      NumberStyle.Percent,
+      {
+         ...defaultOptions,
+         style: NumberStyle.Percent
+      }
+   ]
+]);
 
 /**
  * Regular expression to match all supported currency codes.

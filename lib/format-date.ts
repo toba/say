@@ -76,7 +76,10 @@ export enum DateFormat {
    ShortMonthAndYear = 'shortMonthYear',
 
    /** @example "December 2012" */
-   MonthAndYear = 'monthYear'
+   MonthAndYear = 'monthYear',
+
+   /** @example "1356055200" */
+   Timestamp = 'timestamp'
 }
 
 export enum TimeFormat {
@@ -248,10 +251,21 @@ function makeFormatter<T extends DateFormat | TimeFormat | string>(
    let options: Intl.DateTimeFormatOptions | undefined;
 
    if (!is.empty(format)) {
-      if (formatList.has(format)) {
-         options = formatList.get(format);
+      const f = format.toLowerCase();
+
+      if (formatList.has(f)) {
+         options = formatList.get(f);
       } else {
-         throw Error(`Date/time format "${format}" is not recognized`);
+         switch (f) {
+            case DateFormat.ISO8601:
+               return (d: Date) => d.toISOString();
+            case DateFormat.RFC1123:
+               return (d: Date) => d.toUTCString();
+            case DateFormat.Timestamp:
+               return (d: Date) => d.getTime().toString();
+            default:
+               throw Error(`Date/time format "${format}" is not recognized`);
+         }
       }
    }
    return (d: Date, locale: Locale) => d.toLocaleString(locale, options);

@@ -36,3 +36,12 @@ test('accepts currency parameter', () => {
       expect(fn(23.1, Locale.English)).toBe(out);
    });
 });
+
+test('formats percentages', () => {
+   const should: Map<string, string> = new Map([['percent', '23%']]);
+
+   should.forEach((out, currency) => {
+      const fn = formatNumber(currency);
+      expect(fn(0.23, Locale.English)).toBe(out);
+   });
+});
