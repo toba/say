@@ -1,4 +1,4 @@
-import { Formatter } from './icu';
+import { Formatter } from './say';
 import { Locale } from './constants';
 
 /**

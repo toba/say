@@ -1,5 +1,5 @@
 import { is } from '@toba/tools';
-import { Formatter } from './icu';
+import { Formatter } from './say';
 import { Locale } from './constants';
 
 /**
@@ -39,7 +39,12 @@ export enum DigitStyle {
 }
 
 /**
+ * Names mapped to `Intl.DateTimeFormatOptions` to produce typical date formats.
+ * These may be the third `format` argument in an ICU message string.
  *
+ * @example
+ * "some text {key, date, monthDay} other"
+ * "some text {key2, date, longWithTime} other"
  */
 export enum DateFormat {
    /** @example "2/20/2012" */
@@ -82,6 +87,14 @@ export enum DateFormat {
    Timestamp = 'timestamp'
 }
 
+/**
+ * Names mapped to `Intl.DateTimeFormatOptions` to produce typical time formats.
+ * These may be the third `format` argument in an ICU message string.
+ *
+ * @example
+ * "some text {key, time, short} other"
+ * "some text {key2, time, long} other"
+ */
 export enum TimeFormat {
    /** @example "7:00 PM" */
    Short = 'short',

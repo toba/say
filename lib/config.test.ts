@@ -1,11 +1,9 @@
 import '@toba/test';
-import { CurrencyCode, Locale } from './';
-import { config, BasicType, configure } from './config';
+import { Locale } from './';
+import { config, configure } from './config';
 
 test('sets default configuration', () => {
-   expect(config).toHaveProperty(BasicType.Number, {
-      currency: CurrencyCode.USDollar
-   });
+   expect(config).toHaveProperty('locales', Locale.English);
 });
 
 test('updates configuration', () => {

@@ -1,6 +1,6 @@
 import { is } from '@toba/tools';
 import { Locale, CurrencyCode } from './';
-import { Formatter } from './icu';
+import { Formatter } from './say';
 
 /**
  * Possible values of `style` property on `Intl.NumberFormatOptions`.
