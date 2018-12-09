@@ -11,6 +11,8 @@
 
 A translation and localization library designed to optimize developer and translator ergonomics.
 
+ℹ️ [Using a TypeScript module](https://toba.github.io/about/usage)
+
 ## Developers
 
 Leverage the [ECMA-402 Internationalization API](https://www.ecma-international.org/ecma-402/5.0/) built into all modern [browsers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl) so verbose and complex logic, like plural rules,
