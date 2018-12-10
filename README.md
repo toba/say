@@ -19,6 +19,13 @@ Leverage the [ECMA-402 Internationalization API](https://www.ecma-international.
 
 Translations are defined in TypeScript files (`.ts`) to enable autocomplete and validation while editing.
 
+```ts
+export default {
+   [Phrase.AccountBalance]: `Hello {name}, you have {balance, number, currency} in your bank account.`,
+   [Label.Save]: 'Save'
+} as { [key: string]: string };
+```
+
 ### Performance
 
 Instead of parsing to an Abstract Syntax Tree, messsages are parsed and cached directly as format functions.
@@ -35,7 +42,7 @@ $ npx say-report ./locales
 
 #### Unit testing
 
-The output of the standard report can be made a unit test with an expect
+The output of the standard report can be made a unit test with an `expect`
 
 ```ts
 import { reporter } from '@toba/say';
