@@ -1,4 +1,3 @@
-import { clone, mergeAll } from '@toba/tools';
 import { Locale } from './constants';
 
 /**
@@ -11,6 +10,8 @@ export enum BasicType {
    Text = 'string'
 }
 
+export type Translations = { [key: string]: string };
+
 /**
  * Types supported by internationalization library.
  */
@@ -22,24 +23,29 @@ export interface Configuration {
    /**
     * BCP 47 language tag or tags.
     */
-   locales: Locale | Locale[];
-   /**
-    * An object that contains translations as key-value-pairs
-    */
-   translations?: { [key: string]: string };
+   locale: Locale;
+   fallbackLocale: Locale;
+   path: string;
+   translations: Map<Locale, Translations>;
 }
 
-const defaultConfig: Configuration = Object.freeze({
-   locales: Locale.English,
-   translations: {}
+const defaultConfig = (): Configuration => ({
+   locale: Locale.English,
+   fallbackLocale: Locale.English,
+   path: './locale',
+   translations: new Map()
 });
 
-export let config = clone(defaultConfig);
-
-/**
- * Update configuration.
- */
-export function configure(changes: Configuration) {
-   config = mergeAll(config, changes);
+export function setPath(path: string): Configuration {
+   config.path = path;
    return config;
 }
+
+export function setTranslations(locale: Locale, tx?: Translations) {
+   config.locale = locale;
+   if (tx !== undefined) {
+      config.translations.set(locale, tx);
+   }
+}
+
+export let config = defaultConfig();

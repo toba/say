@@ -11,7 +11,7 @@
 
 A translation and localization library designed to optimize developer and translator ergonomics.
 
-ℹ️ [Using a TypeScript module](https://toba.github.io/about/usage)
+💡[Using a TypeScript module](https://toba.github.io/about/usage)
 
 ## Developers
 

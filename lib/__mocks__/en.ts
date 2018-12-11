@@ -1,3 +1,5 @@
+import { Translations } from '../';
+
 export const Phrase = {
    /** A bank customer's balance */
    AccountBalance: 'accountBalance'
@@ -10,4 +12,4 @@ export const Label = {
 export default {
    [Phrase.AccountBalance]: `Hello {name}, you have {balance, number, currency} in your bank account.`,
    [Label.Save]: 'Save'
-} as { [key: string]: string };
+} as Translations;
