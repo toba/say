@@ -1,7 +1,7 @@
 import '@toba/test';
 import { config } from './config';
 import { setTranslationPath, onTranslationChange, Locale } from './';
-import { loadTranslations, setLocale } from './translation';
+import { setLocale } from './translation';
 
 const fn = jest.fn();
 

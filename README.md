@@ -28,7 +28,7 @@ export default {
 
 ### Performance
 
-Instead of parsing to an Abstract Syntax Tree, messsages are parsed and cached directly as format functions.
+Instead of parsing to an Abstract Syntax Tree, messages are parsed and cached directly as format functions.
 
 ### Verification
 
@@ -57,7 +57,7 @@ test('translations are valid', () => {
 
 Uses the International Components for Unicode [(ICU) Message Syntax](http://userguide.icu-project.org/formatparse/messages)
 
-This is a highly versatile syntax supported by the most popular translation services.
+This is a versatile syntax supported by the most popular translation services.
 
 -  [Crowdin](https://blog.crowdin.com/2016/11/09/icu-syntax-in-crowdin/)
 -  [PhraseApp](https://help.phraseapp.com/translate-website-and-app-content/use-icu-message-format/icu-message-format)

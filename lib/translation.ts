@@ -15,6 +15,8 @@ const listeners: Set<TranslationChange> = new Set();
 //  }
 
 /**
+ * Change active locale and load its translations.
+ *
  * Compare
  * @see http://kazupon.github.io/vue-i18n/guide/lazy-loading.html
  */
@@ -28,7 +30,7 @@ export async function setLocale(
       const tx = await import(/* webpackChunkName: "lang-[request]" */ `${
          config.path
       }/${locale}`);
-      translations = tx.defaults;
+      translations = tx.default;
    }
    setTranslations(locale, translations);
 
