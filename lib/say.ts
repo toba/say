@@ -5,6 +5,7 @@ import { formatDate, formatTime } from './format/date';
 import { formatPlural } from './format/plural';
 import { Locale } from './constants';
 import { getTranslation } from './translation';
+import { formatSelect } from './format/select';
 
 export type Formatter<T> = (value: T, locale: Locale | Locale[]) => string;
 
@@ -111,6 +112,10 @@ export function makePlaceholder(
       case ValueType.Plural:
          if (is.value(format)) {
             return formatPlural(format);
+         }
+      case ValueType.Select:
+         if (is.value(format)) {
+            return formatSelect(format);
          }
       case ValueType.Time:
          return formatTime(format);

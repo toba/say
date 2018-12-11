@@ -42,6 +42,7 @@ export function formatSelect(format: string): Formatter<string> {
       if (options.has(key)) {
          return options.get(key)!;
       } else {
+         // TODO: throw error?
          return '';
       }
    };

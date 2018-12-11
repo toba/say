@@ -1,5 +1,5 @@
 import '@toba/test';
-import { Locale } from '..';
+import { Locale } from '../';
 import { parse, formatPlural } from './plural';
 
 const literal = `You have {itemCount, plural,
