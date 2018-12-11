@@ -4,7 +4,7 @@ import { Locale } from '../constants';
 const re = /(\w+)[\r\n\s]*{([^}]+)}/g;
 
 /**
- * Parse map of plural rules from ICU format string.
+ * Create map of selection options from ICU format string.
  *
  * @example
  *  {gender, select,
@@ -40,15 +40,9 @@ export function formatSelect(format: string): Formatter<string> {
 
    return (key: string, locale: Locale) => {
       if (options.has(key)) {
-         text = options.get(exact)!;
+         return options.get(key)!;
       } else {
-         const rules = getRules(locale);
-         const type = rules.select(count);
-         text = options.get(type);
+         return '';
       }
-      // TODO: fallback?
-      return text !== undefined
-         ? text.replace('#', count.toLocaleString(locale))
-         : '';
    };
 }
