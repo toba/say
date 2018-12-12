@@ -1,16 +1,14 @@
 {
    "name": "@toba/say",
    "description": "Toba Internationalization",
-   "version": "1.0.0",
+   "version": "1.0.0-beta.1",
    "private": false,
    "publishConfig": {
       "access": "public"
    },
    "main": "lib/index.ts",
-   "types:": "js/index.d.ts",
    "files": [
-      "lib/**/!(*.test).ts",
-      "js"
+      "lib/**/!(*.test).ts"
    ],
    "license": "MIT",
    "repository": {
