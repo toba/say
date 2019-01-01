@@ -3,6 +3,10 @@
    "tasks": [
       {
          "label": "Test",
+         "presentation": {
+            "showReuseMessage": false,
+            "clear": true
+         },
          "command": "./node_modules/.bin/jest",
          "args": ["--verbose"],
          "type": "shell",

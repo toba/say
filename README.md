@@ -3,15 +3,13 @@
 ![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)
 [![Dependencies](https://img.shields.io/david/toba/say.svg)](https://david-dm.org/toba/say)
 [![DevDependencies](https://img.shields.io/david/dev/toba/say.svg)](https://david-dm.org/toba/say#info=devDependencies&view=list)
-[![codecov](https://codecov.io/gh/toba/say/branch/master/graph/badge.svg)](https://codecov.io/gh/toba/say)
+[![Test Coverage](https://codecov.io/gh/toba/say/branch/master/graph/badge.svg)](https://codecov.io/gh/toba/say)
 
 <img src='https://toba.github.io/about/images/logo-colored.svg' width="100" align="right"/>
 
 # Toba Say
 
 A translation and localization library designed to optimize developer and translator ergonomics.
-
-💡[Using a TypeScript module](https://toba.github.io/about/usage)
 
 ## Developers
 
@@ -71,7 +69,7 @@ The development format is standard ICU Message Syntax. To
 
 ## License
 
-Copyright &copy; 2018 Jason Abbott
+Copyright &copy; 2019 Jason Abbott
 
 This software is licensed under the MIT license. See the [LICENSE](./LICENSE) file
 accompanying this software for terms of use.

@@ -1,5 +1,5 @@
 export {
-   setLocale,
+   //setLocale,
    setPath as setTranslationPath,
    Translations
 } from './config';
