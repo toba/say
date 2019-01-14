@@ -151,12 +151,11 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@toba/develop@^4.3.1":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@toba/develop/-/develop-4.3.1.tgz#852b14d2180c6d2f075bb46d05ccf1d653e03f21"
-  integrity sha512-bq4Xl04Li9Qm8ZWy7e/mtRx9dF8KMzOQXlPfH/H6emoKG+YyAaZ/qC6TUIOms/NElrdlHijzsHwHcHDHzvJUnw==
+"@toba/build@^2.0.0":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@toba/build/-/build-2.1.4.tgz#0f4d43379724c85594ebde7748ae5e8b4b50cebb"
+  integrity sha512-S/VDKXXdxgotgJphkPARySsnPUSS0J3WTeeuwXu92h5rwuaB0mk69v4Pozfq37owH9/djjC/pIwSo60d45qStQ==
   dependencies:
-    "@types/prettier" "^1.15.2"
     prettier "^1.15.0"
     stylelint "^9.9.0"
     stylelint-config-standard "^18.2.0"
@@ -166,16 +165,35 @@
     tslint-consistent-codestyle "^1.14.0"
     typescript "^3.2.0"
 
-"@toba/test@^3.0.0":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@toba/test/-/test-3.0.2.tgz#a5275a0a919aa5cd6bc5e08f5977582270ab8273"
-  integrity sha512-PzHAMASA7gzuNgd8J6C+MGvt2WqV+IlzoE/nrZL60mL8069Fxk9+TK/hh8cPT1zrVL/CGiXYLCLTYsPGnlet6Q==
+"@toba/develop@^4.3.1":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@toba/develop/-/develop-4.4.2.tgz#9b414094eb0a508642292ab044b59103a2e30b2b"
+  integrity sha512-asY0XQF0CDQL3OCpMZy8MkvP3jPHSISbQEFm1jnqBEjrqX7NPC1pgy9dekArlhvZsjj+Iw0UXwJ2o9Vi/c0X7g==
+  dependencies:
+    prettier "^1.15.0"
+    stylelint "^9.9.0"
+    stylelint-config-standard "^18.2.0"
+    stylelint-scss "^3.4.0"
+    tslint "^5.11.0"
+    tslint-config-prettier "^1.17.0"
+    tslint-consistent-codestyle "^1.14.0"
+    typescript "^3.2.0"
+
+"@toba/test@^2.0.0":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@toba/test/-/test-2.3.3.tgz#0738bca99b245cb9915b8144eb6a65e018520e81"
+  integrity sha512-S/iD2xXke/W9p1kM99x0FG1aX594BKUZEDjReOWykBfZiBAQCob5DbOIo7P/RIzdmJJNGzxyXJiLxVa9QXWeAA==
   dependencies:
     "@toba/tools" "^5.0.0"
     "@types/jest" "^23.3.0"
     jest "^23.5.0"
     jest-date-mock "^1.0.6"
     ts-jest "^23.10.4"
+
+"@toba/tools@^4.2.0":
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/@toba/tools/-/tools-4.4.1.tgz#85a888b9d7ab7ee882c727e2b10b6be88f70b118"
+  integrity sha512-MLg6WzM7iOl+C7Nr6BD1SZMoucz5vIWNatqcQlN+BQi4gKj9MSMfXG4B8RW/HEfDbxRRCYh9CwZat8fResI4WQ==
 
 "@toba/tools@^5.0.0":
   version "5.1.3"
@@ -186,11 +204,6 @@
   version "23.3.12"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.12.tgz#7e0ced251fa94c3bc2d1023d4b84b2992fa06376"
   integrity sha512-/kQvbVzdEpOq4tEWT79yAHSM4nH4xMlhJv2GrLVQt4Qmo8yYsPdioBM1QpN/2GX1wkfMnyXvdoftvLUr0LBj7Q==
-
-"@types/prettier@^1.15.2":
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-1.15.2.tgz#91594ea7cb6f3b1f7ea69f32621246654c7cc231"
-  integrity sha512-XIB0ZCaFZmWUHAa9dBqP5UKXXHwuukmVlP+XcyU94dui2k+l2lG+CHAbt2ffenHPUqoIs5Beh8Pdf2YEq/CZ7A==
 
 abab@^2.0.0:
   version "2.0.0"
@@ -3570,9 +3583,9 @@ postcss-jsx@^0.35.0:
     postcss-styled ">=0.34.0"
 
 postcss-less@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/postcss-less/-/postcss-less-3.1.0.tgz#0e14a80206b452f44d3a09d082fa72645e8168cc"
-  integrity sha512-+fDH2A9zV8B4gFu3Idhq8ma09/mMBXXc03T2lL9CHjBQqKrfUit+TrQrnojc6Y4k7N4E+tyE1Uj5U1tcoKtXLQ==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/postcss-less/-/postcss-less-3.1.1.tgz#87347038bf9cdec9c47722ecf97648bacd171cc3"
+  integrity sha512-yVa0hb03p7xj914Z4qDDA/PGwXYvCEfjJizWVYQvnEQr8SgJ098qejCvbCGk1dDYQpQEGKkvYHQCo66DwTocjg==
   dependencies:
     postcss "^7.0.3"
 
@@ -4524,9 +4537,9 @@ symbol-tree@^3.2.2:
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
 
 table@^5.0.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/table/-/table-5.2.0.tgz#2e38bd1f16dd3f97085ac80cdc574ad9198af04d"
-  integrity sha512-hAdBBAMCZl4/U3eQhsPN2Z8wRJC98lpRhDW2I86VQbPBqyj4E681VhvUkfb90qUJ4rnRfu8t4/8SGHPsAH1ygg==
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/table/-/table-5.2.1.tgz#e78463702b1be9f7131c39860bcfb1b81114c2a1"
+  integrity sha512-qmhNs2GEHNqY5fd2Mo+8N1r2sw/rvTAAvBZTaTx+Y7PHLypqyrxr1MdIu0pLw6Xvl/Gi4ONu/sdceP8vvUjkyA==
   dependencies:
     ajv "^6.6.1"
     lodash "^4.17.11"

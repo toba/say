@@ -25,11 +25,12 @@
       "node": ">= 10.0.0"
    },
    "dependencies": {
-      "@toba/tools": "^5.0.0"
+      "@toba/build": "^2.0.0",
+      "@toba/tools": "^4.2.0"
    },
    "devDependencies": {
       "@toba/develop": "^4.3.1",
-      "@toba/test": "^3.0.0",
+      "@toba/test": "^2.0.0",
       "intl": "^1.2.5"
    }
 }
