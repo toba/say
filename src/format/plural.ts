@@ -70,7 +70,7 @@ export function parse(format: string): Map<PluralType | string, string> {
    let matches: RegExpExecArray | null;
 
    while ((matches = re.exec(format)) !== null) {
-      const [rule, type, text] = matches;
+      const [, type, text] = matches;
       plurals.set(type, text);
    }
    return plurals;

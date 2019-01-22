@@ -19,7 +19,7 @@ export function parse(format: string): Map<string, string> {
    let matches: RegExpExecArray | null;
 
    while ((matches = re.exec(format)) !== null) {
-      const [rule, type, text] = matches;
+      const [, type, text] = matches;
       options.set(type, text);
    }
    return options;
@@ -38,7 +38,7 @@ export function parse(format: string): Map<string, string> {
 export function formatSelect(format: string): Formatter<string> {
    const options = parse(format);
 
-   return (key: string, locale: Locale) => {
+   return (key: string, _locale: Locale) => {
       if (options.has(key)) {
          return options.get(key)!;
       } else {
