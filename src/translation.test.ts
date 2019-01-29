@@ -10,6 +10,8 @@ beforeAll(() => {
    setTranslationPath('./__mocks__/');
 });
 
+// Babel may have trouble transforming this method for Jest
+// https://github.com/airbnb/enzyme/issues/1460
 test('loads translations from file', async () => {
    const en = Locale.English;
    expect(config.translations.has(en)).toBe(false);
