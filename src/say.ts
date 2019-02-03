@@ -113,10 +113,14 @@ export function makePlaceholder(
          if (is.value(format)) {
             return formatPlural(format);
          }
+         // TODO: verify break since this previously allowed fall-through
+         break;
       case ValueType.Select:
          if (is.value(format)) {
             return formatSelect(format);
          }
+         // TODO: verify break since this previously allowed fall-through
+         break;
       case ValueType.Time:
          return formatTime(format);
    }

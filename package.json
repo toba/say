@@ -25,7 +25,8 @@
       "node": ">= 10.0.0"
    },
    "dependencies": {
-      "@toba/tools": "^5.0.0"
+      "@toba/build": "^4.0.0",
+      "@toba/tools": "^6.0.0"
    },
    "devDependencies": {
       "@toba/develop": "^5.0.0",

@@ -22,7 +22,7 @@ const listeners: Set<TranslationChange> = new Set();
  */
 export async function setLocale(
    locale: Locale,
-   fallback: Locale = Locale.English
+   _fallback: Locale = Locale.English
 ) {
    let translations: Translations | undefined;
 
