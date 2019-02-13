@@ -1,16 +1,16 @@
 {
    "name": "@toba/say",
    "description": "Toba Internationalization",
-   "version": "1.0.0-beta.4",
+   "version": "1.0.0-beta.6",
    "private": false,
    "publishConfig": {
       "access": "public"
    },
    "sideEffects": false,
-   "main": "dist/index.js",
-   "types": "dist/index.d.ts",
+   "main": "es6/index.js",
+   "types": "es6/index.d.ts",
    "files": [
-      "dist"
+      "es6"
    ],
    "scripts": {
       "prepublishOnly": "./node_modules/.bin/tsc --project tsconfig.build.json",
@@ -29,7 +29,6 @@
       "@toba/tools": "^6.0.0"
    },
    "devDependencies": {
-      "@toba/develop": "^5.0.0",
       "@toba/test": "^3.0.0",
       "intl": "^1.2.5"
    }
