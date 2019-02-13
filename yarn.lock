@@ -830,9 +830,9 @@
     webpack-dev-server "^3.1.10"
 
 "@toba/develop@^6.0.0":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@toba/develop/-/develop-6.0.1.tgz#00ce8db8ee4ef89679c6e0ad9251cd1fb750464c"
-  integrity sha512-SGnIZ2wr0IAPFyPSposmL/ejy48zWvqoyvRcx1PPDO0FOj+uD3lqAhQAPov5Zmd6h28P07segbra+ddtkbQEZg==
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@toba/develop/-/develop-6.0.2.tgz#16a6a041feb865b013ea9c39af616c499805b1ed"
+  integrity sha512-NnDaxChurAedsGW8G7vs/JZ3bq3mC0aZnCcDuPExgT+ufIdnrLpj47c3ubCl8psnwzXsNSBSNhOIOhQFoGwkcA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^1.2.0"
     eslint "^5.13.0"
