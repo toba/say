@@ -12,7 +12,9 @@ export type Formatter<T> = (value: T, locale: Locale | Locale[]) => string;
 /**
  * Values supplied to replace placeholders in translated string literal.
  */
-type Interpolations = { [key: string]: AllowedType };
+interface Interpolations {
+   [key: string]: AllowedType;
+}
 
 /**
  * Placeholders found within a template string. A formatter for the type and

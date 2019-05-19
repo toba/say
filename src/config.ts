@@ -10,7 +10,9 @@ export enum BasicType {
    Text = 'string'
 }
 
-export type Translations = { [key: string]: string };
+export interface Translations {
+   [key: string]: string;
+}
 
 /**
  * Types supported by internationalization library.
@@ -36,6 +38,8 @@ const defaultConfig = (): Configuration => ({
    translations: new Map()
 });
 
+export let config = defaultConfig();
+
 export function setPath(path: string): Configuration {
    config.path = path;
    return config;
@@ -47,5 +51,3 @@ export function setTranslations(locale: Locale, tx?: Translations) {
       config.translations.set(locale, tx);
    }
 }
-
-export let config = defaultConfig();

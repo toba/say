@@ -245,18 +245,6 @@ export const dateFormats: FormatOptions = new Map([
    ]
 ]);
 
-/**
- * Lookup format and build function.
- */
-export const formatDate = (format?: DateFormat | string): Formatter<Date> =>
-   makeFormatter(dateFormats, format);
-
-/**
- * Lookup format and build function.
- */
-export const formatTime = (format?: DateFormat | string): Formatter<Date> =>
-   makeFormatter(timeFormats, format);
-
 function makeFormatter<T extends DateFormat | TimeFormat | string>(
    formatList: FormatOptions,
    format?: T
@@ -283,3 +271,15 @@ function makeFormatter<T extends DateFormat | TimeFormat | string>(
    }
    return (d: Date, locale: Locale) => d.toLocaleString(locale, options);
 }
+
+/**
+ * Lookup format and build function.
+ */
+export const formatDate = (format?: DateFormat | string): Formatter<Date> =>
+   makeFormatter(dateFormats, format);
+
+/**
+ * Lookup format and build function.
+ */
+export const formatTime = (format?: DateFormat | string): Formatter<Date> =>
+   makeFormatter(timeFormats, format);
