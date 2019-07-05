@@ -115,6 +115,9 @@ const defaultOptions: Intl.DateTimeFormatOptions = {
    timeZoneName: undefined
 };
 
+/**
+ * Named option groups specifying the format for each element of a date or time.
+ */
 type FormatOptions = Map<string, Intl.DateTimeFormatOptions>;
 
 /**
@@ -245,6 +248,11 @@ export const dateFormats: FormatOptions = new Map([
    ]
 ]);
 
+/**
+ * Return function to format date/time per given format options.
+ * @param formatList Predefined format options
+ * @param format
+ */
 function makeFormatter<T extends DateFormat | TimeFormat | string>(
    formatList: FormatOptions,
    format?: T
@@ -255,9 +263,11 @@ function makeFormatter<T extends DateFormat | TimeFormat | string>(
       const f = format.toLowerCase();
 
       if (formatList.has(f)) {
+         // use predefined custom format
          options = formatList.get(f);
       } else {
          switch (f) {
+            // use format built into date object (or fail)
             case DateFormat.ISO8601:
                return (d: Date) => d.toISOString();
             case DateFormat.RFC1123:
@@ -269,6 +279,7 @@ function makeFormatter<T extends DateFormat | TimeFormat | string>(
          }
       }
    }
+   // default behavior uses locale default formatting
    return (d: Date, locale: Locale) => d.toLocaleString(locale, options);
 }
 

@@ -1,5 +1,5 @@
 import { is } from '@toba/tools';
-import { AllowedType } from './config';
+import { AllowedType, config } from './config';
 import { formatNumber } from './format/number';
 import { formatDate, formatTime } from './format/date';
 import { formatPlural } from './format/plural';
@@ -7,6 +7,9 @@ import { Locale } from './constants';
 import { getTranslation } from './translation';
 import { formatSelect } from './format/select';
 
+/**
+ * Method that translates a value to a given locale.
+ */
 export type Formatter<T> = (value: T, locale: Locale | Locale[]) => string;
 
 /**
@@ -55,6 +58,49 @@ const cache: Map<string, Placeholders | null> = new Map();
 const re = /{(\w+)(,\s+(\w+)(,\s+(\w+))?)?}/g;
 
 /**
+ * Clear cached translation and localization functions. Cache will be lazily
+ * rebuilt in `getPlaceholders()`.
+ */
+export function resetCache() {
+   cache.clear();
+}
+
+/**
+ * Compile key matcher and formatter for ICU message placeholder. This will be
+ * cached so different values can quickly be interpolated with the same format
+ * string.
+ */
+export function makePlaceholder(
+   type: string,
+   format?: string
+): Formatter<AllowedType> {
+   if (is.empty(type)) {
+      return (v: string) => v;
+   }
+   switch (type) {
+      case ValueType.Date:
+         return formatDate(format);
+      case ValueType.Number:
+         return formatNumber(format);
+      case ValueType.Plural:
+         if (is.value<string>(format)) {
+            return formatPlural(format);
+         }
+         // TODO: verify break since this previously allowed fall-through
+         break;
+      case ValueType.Select:
+         if (is.value<string>(format)) {
+            return formatSelect(format);
+         }
+         // TODO: verify break since this previously allowed fall-through
+         break;
+      case ValueType.Time:
+         return formatTime(format);
+   }
+   throw Error(`Unsupported type "${type}" and format "${format}"`);
+}
+
+/**
  * Parse placeholders from literal.
  * @param key Translation key in localized files
  * @param literal Translated text from localized files
@@ -90,55 +136,34 @@ export function getPlaceholders(
    }
 }
 
-export function resetCache() {
-   cache.clear();
-}
-
 /**
- * Compile key matcher and formatter for ICU message placeholder. This will be
- * cached so different values can quickly be interpolated with the same format
- * string.
- */
-export function makePlaceholder(
-   type: string,
-   format?: string
-): Formatter<AllowedType> {
-   if (is.empty(type)) {
-      return (v: string) => v;
-   }
-   switch (type) {
-      case ValueType.Date:
-         return formatDate(format);
-      case ValueType.Number:
-         return formatNumber(format);
-      case ValueType.Plural:
-         if (is.value(format)) {
-            return formatPlural(format);
-         }
-         // TODO: verify break since this previously allowed fall-through
-         break;
-      case ValueType.Select:
-         if (is.value(format)) {
-            return formatSelect(format);
-         }
-         // TODO: verify break since this previously allowed fall-through
-         break;
-      case ValueType.Time:
-         return formatTime(format);
-   }
-   throw Error(`Unsupported type "${type}" and format "${format}"`);
-}
-
-/**
+ * Say the translated text matching the given key.
  * @param key Translation key in localized files
  * @param values Optional values to replace placeholders in translated text
  */
-export function say(key: string, values: Interpolations): string {
-   const literal = getTranslation(key);
+export function say(key: string, values?: Interpolations): string | undefined {
+   let literal = getTranslation(key);
+
+   if (literal === undefined) {
+      return undefined;
+   }
    const placeholders = getPlaceholders(key, literal);
 
    if (placeholders !== null) {
+      if (values === undefined) {
+         // TODO: show some kind of error
+         return literal;
+      }
+
       // iterate values and invoke placeholder methods
+      placeholders.forEach((formatter, key) => {
+         const v = values[key];
+         const ph = formatter[0];
+         const fn = formatter[1];
+         const text = fn(v, [config.locale, config.fallbackLocale]);
+
+         literal = literal!.replace(ph, text);
+      });
    }
    return literal;
 }

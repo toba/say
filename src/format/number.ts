@@ -1,12 +1,18 @@
 import { is } from '@toba/tools';
-import { Locale, CurrencyCode } from '..';
+import { config } from '../config';
+import { Locale, CurrencyCode, LocaleCurrency } from '../';
 import { Formatter } from '../say';
+import { createConfigItem } from '@babel/core';
 
 /**
  * Possible values of `style` property on `Intl.NumberFormatOptions`.
  */
 export enum NumberStyle {
    Decimal = 'decimal',
+   /**
+    * If the number style is "currency" then an additional parameter called
+    * `currency` is required to define the specific currency.
+    */
    Currency = 'currency',
    Percent = 'percent'
 }
@@ -63,6 +69,11 @@ export const isCurrencyCode = (code?: string): code is string => {
    return code === undefined ? false : currencyPattern.test(code);
 };
 
+const inferCurrency = (locale: Locale): CurrencyCode =>
+   LocaleCurrency.hasOwnProperty(locale)
+      ? LocaleCurrency[locale]
+      : config.fallbackCurrency;
+
 /**
  * Lookup style and build function.
  */
@@ -88,6 +99,7 @@ export function formatNumber(format?: string): Formatter<number> {
       options = {
          ...options,
          style: NumberStyle.Currency,
+         currency: inferCurrency(config.locale),
          minimumFractionDigits: 2,
          maximumFractionDigits: 2
       };

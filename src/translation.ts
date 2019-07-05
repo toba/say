@@ -1,10 +1,20 @@
+import { is } from '@toba/tools';
 import { Locale } from './constants';
 import { config, setTranslations, Translations } from './config';
 
+/**
+ * Method that responds to a locale change.
+ */
 type TranslationChange = (locale: Locale) => void;
 
-const loaded: Set<Locale> = new Set([Locale.English]);
+/**
+ * Global singleton indicating which translations have been loaded.
+ */
+const loaded: Set<Locale> = new Set();
 
+/**
+ * Methods listening for a translation change.
+ */
 const listeners: Set<TranslationChange> = new Set();
 
 // function setI18nLanguage (lang) {
@@ -22,29 +32,50 @@ const listeners: Set<TranslationChange> = new Set();
  */
 export async function setLocale(
    locale: Locale,
-   _fallback: Locale = Locale.English
-) {
+   fallback: Locale = Locale.English
+): Promise<boolean> {
    let translations: Translations | undefined;
 
-   if (true || !loaded.has(locale)) {
-      const tx = await import(/* webpackChunkName: "lang-[request]" */ `${
-         config.path
-      }/${locale}`);
+   if (!loaded.has(locale)) {
+      const tx = await import(`${config.path}/${locale}`);
       translations = tx.default;
+      loaded.add(locale);
+      config.ready = true;
    }
    setTranslations(locale, translations);
 
+   // notify each listener that locale has changed
    listeners.forEach(fn => {
       fn(locale);
    });
    return true;
 }
 
+/**
+ * Initialize translations.
+ */
+export async function initialize(): Promise<boolean> {
+   if (!config.ready) {
+      return setLocale(config.locale, config.fallbackLocale);
+   }
+   return true;
+}
+
+/**
+ * Call method when locale changes.
+ */
 export function onLocaleChange(fn: TranslationChange) {
    listeners.add(fn);
 }
 
-export function getTranslation(key: string): string {
-   const tx = config.translations.get(config.locale)!;
-   return tx[key];
+/**
+ * Retrieve translation literal for given key and currently configured locale.
+ */
+export function getTranslation(key: string): string | undefined {
+   // TODO: execute locale fallback logic
+   if (!config.ready) {
+      throw Error('No translations are loaded');
+   }
+   const tx = config.translations.get(config.locale);
+   return is.value<Translations>(tx) ? tx[key] : undefined;
 }

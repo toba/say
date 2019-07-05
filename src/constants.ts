@@ -1,4 +1,5 @@
 /**
+ * Supported three-letter currency codes.
  * @see https://www.iban.com/currency-codes
  */
 export enum CurrencyCode {
@@ -34,14 +35,19 @@ export enum CurrencyCode {
  * BCP 47 language tags.
  * @see https://tools.ietf.org/html/rfc5646
  *
+ * TODO: why different from these:
+ * @see https://www.w3schools.com/Tags/ref_language_codes.asp
+ *
  * Subset supported in Electron:
  * @see https://electronjs.org/docs/api/locales
+ *
  * Subset supported in VSCode:
  * @see https://github.com/Microsoft/Localization/wiki/Visual-Studio-Code-Community-Localization-Project#9-core-languages
  */
 export enum Locale {
    Armenian = 'hy',
    Basque = 'eu',
+   Canada = 'en-CA',
    Chinese = 'zh',
    ChineseSimplified = 'zh-CN',
    ChineseTraditional = 'zh-TW',
@@ -50,6 +56,7 @@ export enum Locale {
    Danish = 'da',
    Dutch = 'nl',
    English = 'en',
+   EnglishInAustralia = 'en-AU',
    EnglishInCanada = 'en-CA',
    EnglishInNewZealand = 'en-NZ',
    EnglishInSouthAfrica = 'en-ZA',
@@ -95,3 +102,14 @@ export enum Locale {
    Turkish = 'tr',
    Welsh = 'cy'
 }
+
+/**
+ * Default currency for a locale. This may be used for a format string that
+ * only passes `currency` for the number type rather than a specific currency.
+ */
+export const LocaleCurrency: { [key: string]: CurrencyCode } = {
+   [Locale.English]: CurrencyCode.USDollar,
+   [Locale.EnglishInCanada]: CurrencyCode.NewZealandDollar,
+   [Locale.Japanese]: CurrencyCode.Yen,
+   [Locale.Russian]: CurrencyCode.Ruble
+};

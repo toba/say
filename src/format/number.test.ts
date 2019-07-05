@@ -3,7 +3,7 @@ import { Locale } from '..';
 import { formatNumber, isCurrencyCode } from './number';
 
 test('identifies currency codes', () => {
-   ['usd'].forEach(code => {
+   ['usd', 'nzd'].forEach(code => {
       expect(isCurrencyCode(code)).toBe(true);
    });
    ['blah'].forEach(code => {

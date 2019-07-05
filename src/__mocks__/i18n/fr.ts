@@ -1,5 +1,5 @@
-import { Translations } from '../';
-import { Phrase, Label } from './en';
+import { Translations } from '../../';
+import { Phrase, Label } from './';
 
 export default {
    [Phrase.AccountBalance]: 'Hello {0}, you have {1} in your bank account.',
