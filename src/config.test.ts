@@ -1,6 +1,6 @@
 import '@toba/test';
 import { Locale } from './';
-import { config, setPath, setTranslations } from './config';
+import { config, setTranslations, setBasePath } from './config';
 
 test('sets default configuration', () => {
    expect(config).toHaveProperty('locale', Locale.English);
@@ -9,15 +9,22 @@ test('sets default configuration', () => {
 test('updates configuration', () => {
    const en = Locale.English;
    expect(config).toHaveProperty('locale', en);
-   expect(config).toHaveProperty('path', './i18n');
    expect(config.translations.has(en)).toBe(false);
 
    //setLocale(Locale.Spanish);
-   setPath('./test');
    setTranslations(en, { key: 'text' });
 
    //expect(config).toHaveProperty('locale', Locale.Spanish);
    expect(config).toHaveProperty('fallbackLocale', en);
-   expect(config).toHaveProperty('path', './test');
    expect(config.translations.has(en)).toBe(true);
+});
+
+test('allows updating base path', () => {
+   expect(config).toHaveProperty('basePath');
+
+   setBasePath('something');
+   expect(config.basePath).toBe('something/');
+
+   setBasePath('something/else/');
+   expect(config.basePath).toBe('something/else/');
 });

@@ -1,31 +1,33 @@
+import path from 'path';
 import '@toba/test';
+import { mockFetch } from '@toba/test';
 import { config, reset } from './config';
-import { Label } from './__mocks__/i18n/';
-import { Label as AddedLabel } from './__mocks__/component/';
-import { setTranslationPath, addPath, onTranslationChange, Locale } from './';
-import { setLocale, initialize, getTranslation } from './translation';
+import { addSource, onLocaleChange, Locale, setBasePath } from './';
+import { setLocale, getTranslation } from './translation';
 
 const fn = jest.fn();
 
-beforeEach(() => {
+beforeAll(() => {
+   mockFetch(url => path.join(__dirname, url.toString()));
+});
+
+beforeEach(async () => {
    reset();
-   onTranslationChange(fn);
-   setTranslationPath('./__mocks__/i18n/');
+   setBasePath('__mocks__/i18n/');
+   onLocaleChange(fn);
+   await addSource('thing1');
 });
 
 // Babel may have trouble transforming this method for Jest
 // https://github.com/airbnb/enzyme/issues/1460
 test('loads initial translations from file', async () => {
    const en = Locale.English;
-   expect(config.translations.has(en)).toBe(false);
    expect(fn).not.toHaveBeenCalled();
-   expect(config.ready).toBe(false);
 
-   await initialize();
+   await setLocale(en);
 
    expect(fn).toHaveBeenCalledTimes(1);
    expect(fn).toHaveBeenCalledWith(en);
-   expect(config.ready).toBe(true);
    expect(config.translations.has(en)).toBe(true);
 });
 
@@ -34,6 +36,7 @@ test('loads alternate translations from file', async () => {
    expect(config.translations.has(fr)).toBe(false);
 
    await setLocale(fr);
+
    expect(fn).toHaveBeenCalledTimes(2);
    expect(fn).toHaveBeenLastCalledWith(fr);
    expect(config.translations.has(fr)).toBe(true);
@@ -41,30 +44,30 @@ test('loads alternate translations from file', async () => {
 
 test('retrieves translation literal for key', async () => {
    await setLocale(Locale.French);
-   const s = getTranslation(Label.Save);
+   const s = getTranslation('label.save');
    expect(s).toBe('French Save');
 });
 
 test('adds supplemental translation (such as for component)', async () => {
-   await addPath('./__mocks__/component');
-   const t1 = getTranslation(AddedLabel.Exit);
+   await addSource('thing2');
+   const t1 = getTranslation('label.exit');
    expect(t1).toBe('Exit');
    // existing translations should be intact
-   const t2 = getTranslation(Label.Save);
+   const t2 = getTranslation('label.save');
    expect(t2).toBe('Save');
 });
 
 test('supplemental translations are updated when locale changes', async () => {
-   await addPath('./__mocks__/component');
+   await addSource('thing2');
 
-   const t1 = getTranslation(AddedLabel.Exit);
+   const t1 = getTranslation('label.exit');
    expect(t1).toBe('Exit');
 
    await setLocale(Locale.French);
 
-   const t2 = getTranslation(Label.Save);
+   const t2 = getTranslation('label.save');
    expect(t2).toBe('French Save');
 
-   const t3 = getTranslation(AddedLabel.Exit);
+   const t3 = getTranslation('label.exit');
    expect(t3).toBe('French Exit');
 });

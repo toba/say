@@ -1,0 +1,4 @@
+{
+   "accountBalance": "Hallo {name}, Sie haben {balance, number, currency} auf Ihrem Bankkonto.",
+   "label.save": "Dutch Save"
+}

@@ -46,32 +46,27 @@ export interface Configuration {
     */
    fallbackCurrency: CurrencyCode;
    /**
-    * Relative file path to folder containing translation files.
-    */
-   path: string;
-   /**
-    * Translation content mapped to locale.
+    * Combined translation content from sources mapped to locale.
     */
    translations: Map<Locale, Translations>;
    /**
-    * Whether global translations are loaded.
+    * Path prepended to all added source paths (must include trailing slash).
     */
-   ready: boolean;
+   basePath: string;
    /**
-    * Supplemental translations files (usually for components) that have been
-    * loaded at a particular path.
+    * Translations file paths mapped to which locales have beeen loaded from
+    * that source.
     */
-   added: Map<string, Set<Locale>>;
+   sources: Map<string, Set<Locale>>;
 }
 
 const defaultConfig = (): Configuration => ({
    locale: Locale.English,
    fallbackLocale: Locale.English,
    fallbackCurrency: CurrencyCode.USDollar,
-   path: './i18n',
+   basePath: '/assets/i18n/',
    translations: new Map(),
-   ready: false,
-   added: new Map()
+   sources: new Map()
 });
 
 /**
@@ -79,17 +74,18 @@ const defaultConfig = (): Configuration => ({
  */
 export let config = defaultConfig();
 
-/**
- * @param path Path to locale translation files
- */
-export function setPath(path: string): Configuration {
-   config.path = path;
-   return config;
-}
-
 export function reset(): Configuration {
    config = defaultConfig();
    resetTranslations();
+   return config;
+}
+
+/**
+ * Set path used for translation sources.
+ * @param path Path prepended to all source paths
+ */
+export function setBasePath(path: string): Configuration {
+   config.basePath = path.replace(/\/+$/, '') + '/';
    return config;
 }
 

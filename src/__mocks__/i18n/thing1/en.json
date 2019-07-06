@@ -1,0 +1,4 @@
+{
+   "account-balance": "Hello {name}, you have {balance, number, currency} in your bank account.",
+   "label.save": "Save"
+}

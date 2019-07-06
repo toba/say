@@ -1,12 +1,4 @@
-export {
-   //setLocale,
-   setPath as setTranslationPath,
-   Translations
-} from './config';
+export { Translations, setBasePath } from './config';
 export { say } from './say';
 export { CurrencyCode, Locale, LocaleCurrency } from './constants';
-export {
-   onLocaleChange as onTranslationChange,
-   initialize,
-   addPath
-} from './translation';
+export { onLocaleChange, addSource } from './translation';

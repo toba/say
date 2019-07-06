@@ -1,15 +1,21 @@
+import path from 'path';
 import '@toba/test';
-import { Label, Phrase } from './__mocks__/i18n/';
-import { setTranslationPath } from './';
-import { say, makePlaceholder, getPlaceholders, resetCache } from './say';
-import { initialize } from './translation';
+import { mockFetch } from '@toba/test';
+import { reset, config } from './config';
+import { addSource, setBasePath } from './';
+import { say, makePlaceholder, getPlaceholders } from './say';
 
 // compare tests
 // https://github.com/format-message/format-message/blob/master/packages/format-message-parse/__tests__/index.spec.js
 
-beforeEach(() => {
-   resetCache();
-   setTranslationPath('./__mocks__/i18n/');
+beforeAll(() => {
+   mockFetch(url => path.join(__dirname, url.toString()));
+});
+
+beforeEach(async () => {
+   reset();
+   setBasePath('__mocks__/i18n/');
+   await addSource('thing1');
 });
 
 test('throws error if trying to parse unsupported type', () => {
@@ -23,12 +29,14 @@ test('throws error if trying to parse unsupported type', () => {
    expect(error).toBeDefined();
 });
 
-test('throws error if configuration is not ready', () => {
+test('throws error if no translations are loaded', () => {
    let error: Error | undefined;
    let text: string | undefined;
 
+   config.translations.clear();
+
    try {
-      text = say(Label.Save);
+      text = say('label.save');
    } catch (e) {
       error = e;
    }
@@ -37,8 +45,7 @@ test('throws error if configuration is not ready', () => {
 });
 
 test('retrieves text for default locale', async () => {
-   await initialize();
-   const text = say(Label.Save);
+   const text = say('label.save');
    expect(text).toBe('Save');
 });
 
@@ -51,8 +58,7 @@ test('assigns parsed placeholders to translation string literals', () => {
 });
 
 test('substitutes values for placeholders', async () => {
-   await initialize();
-   const text = say(Phrase.AccountBalance, {
+   const text = say('account-balance', {
       name: 'John',
       balance: 12345.67
    });

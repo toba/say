@@ -10,7 +10,7 @@ import {
 /**
  * Method that responds to a locale change.
  */
-type TranslationChange = (locale: Locale) => void;
+type LocaleHandler = (locale: Locale) => void;
 
 /**
  * Global singleton indicating which translations have been loaded.
@@ -18,19 +18,25 @@ type TranslationChange = (locale: Locale) => void;
 const loaded: Set<Locale> = new Set();
 
 /**
- * Methods listening for a translation change.
+ * Methods listening for a locale change.
  */
-const listeners: Set<TranslationChange> = new Set();
-
-// function setI18nLanguage (lang) {
-//    i18n.locale = lang
-//    axios.defaults.headers.common['Accept-Language'] = lang
-//    document.querySelector('html').setAttribute('lang', lang)
-//    return lang
-//  }
+const listeners: Set<LocaleHandler> = new Set();
 
 /**
- * Change active locale and load its translations.
+ * Load `json` file as `Translations`.
+ * @param path URL path to server file
+ * @param locale Current locale
+ */
+export async function loadSource(
+   path: string,
+   locale: Locale
+): Promise<Translations> {
+   const res = await fetch(`${path}/${locale}.json`);
+   return res.ok ? res.json() : undefined;
+}
+
+/**
+ * Change active locale and load its translations from each source path.
  *
  * Compare
  * @see http://kazupon.github.io/vue-i18n/guide/lazy-loading.html
@@ -39,32 +45,28 @@ export async function setLocale(
    locale: Locale,
    fallback: Locale = Locale.English
 ): Promise<boolean> {
-   let translations: Translations | undefined;
-   const addPaths: string[] = [];
+   let translations: Translations | undefined = undefined;
+   const sourcePaths: string[] = [];
 
-   if (!loaded.has(locale)) {
-      const tx = await import(`${config.path}/${locale}`);
-      translations = tx.default;
-      loaded.add(locale);
-      config.ready = true;
-   }
-
-   config.added.forEach((locales, path) => {
+   config.sources.forEach((locales, path) => {
       if (!locales.has(locale)) {
-         addPaths.push(path);
+         sourcePaths.push(path);
       }
    });
 
    const additions: Translations[] = await Promise.all(
-      addPaths.map(async p => {
-         const tx = await import(`${p}/${locale}`);
-         config.added.get(p)!.add(locale);
-         return tx.default as Translations;
+      sourcePaths.map(async p => {
+         const tx = await loadSource(p, locale);
+         if (tx === undefined) {
+            throw Error(`Unable to load translations from ${p}`);
+         }
+         config.sources.get(p)!.add(locale);
+         return tx;
       })
    );
 
    if (additions.length > 0) {
-      translations = merge(translations || {}, ...additions);
+      translations = merge({}, ...additions);
    }
 
    setTranslations(locale, translations);
@@ -77,41 +79,29 @@ export async function setLocale(
 }
 
 /**
- * Initialize translations.
+ * Add translations at given path (appended to `config.basePath`) and current
+ * locale to existing configuration.
  */
-export async function initialize(): Promise<boolean> {
-   if (!config.ready) {
-      return setLocale(config.locale, config.fallbackLocale);
+export async function addSource(path: string) {
+   const fullPath = config.basePath + path;
+
+   /** Set of already added locale translations for path */
+   const added = config.sources.has(fullPath)
+      ? config.sources.get(fullPath)!
+      : new Set<Locale>();
+
+   if (!added.has(config.locale)) {
+      const tx = await loadSource(fullPath, config.locale);
+      addTranslations(config.locale, tx);
+      added.add(config.locale);
    }
-   return true;
-}
-
-/**
- * Add translations at given path and current locale to existing configuration.
- */
-export async function addPath(path: string): Promise<boolean> {
-   const success = await initialize();
-
-   if (success) {
-      /** Set of already added locale translations for path */
-      const added = config.added.has(path)
-         ? config.added.get(path)!
-         : new Set<Locale>();
-
-      if (!added.has(config.locale)) {
-         const tx = await import(`${path}/${config.locale}`);
-         addTranslations(config.locale, tx.default);
-         added.add(config.locale);
-      }
-      config.added.set(path, added);
-   }
-   return success;
+   config.sources.set(fullPath, added);
 }
 
 /**
  * Call method when locale changes.
  */
-export function onLocaleChange(fn: TranslationChange) {
+export function onLocaleChange(fn: LocaleHandler) {
    listeners.add(fn);
 }
 
@@ -120,7 +110,7 @@ export function onLocaleChange(fn: TranslationChange) {
  */
 export function getTranslation(key: string): string | undefined {
    // TODO: execute locale fallback logic
-   if (!config.ready) {
+   if (config.translations.size == 0) {
       throw Error('No translations are loaded');
    }
    const tx = config.translations.get(config.locale);
