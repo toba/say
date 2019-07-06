@@ -1,4 +1,6 @@
+import { merge } from '@toba/tools';
 import { Locale, CurrencyCode } from './constants';
+import { reset as resetTranslations } from './translation';
 
 /**
  * Basic types supported by standard internationalization library.
@@ -52,18 +54,24 @@ export interface Configuration {
     */
    translations: Map<Locale, Translations>;
    /**
-    * Whether translations are loaded.
+    * Whether global translations are loaded.
     */
    ready: boolean;
+   /**
+    * Supplemental translations files (usually for components) that have been
+    * loaded at a particular path.
+    */
+   added: Map<string, Set<Locale>>;
 }
 
 const defaultConfig = (): Configuration => ({
    locale: Locale.English,
    fallbackLocale: Locale.English,
    fallbackCurrency: CurrencyCode.USDollar,
-   path: './locale',
+   path: './i18n',
    translations: new Map(),
-   ready: false
+   ready: false,
+   added: new Map()
 });
 
 /**
@@ -79,6 +87,12 @@ export function setPath(path: string): Configuration {
    return config;
 }
 
+export function reset(): Configuration {
+   config = defaultConfig();
+   resetTranslations();
+   return config;
+}
+
 /**
  * @param locale Locale to use for subsequent translation lookups
  * @param tx Optional translations for the new locale
@@ -87,5 +101,15 @@ export function setTranslations(locale: Locale, tx?: Translations) {
    config.locale = locale;
    if (tx !== undefined) {
       config.translations.set(locale, tx);
+   }
+}
+
+export function addTranslations(locale: Locale, tx: Translations) {
+   if (config.translations.has(locale)) {
+      const existing = config.translations.get(locale)!;
+      const merged = merge(existing, tx);
+      config.translations.set(locale, merged);
+   } else {
+      setTranslations(locale, tx);
    }
 }

@@ -1,12 +1,14 @@
 import '@toba/test';
-import { config } from './config';
+import { config, reset } from './config';
 import { Label } from './__mocks__/i18n/';
-import { setTranslationPath, onTranslationChange, Locale } from './';
+import { Label as AddedLabel } from './__mocks__/component/';
+import { setTranslationPath, addPath, onTranslationChange, Locale } from './';
 import { setLocale, initialize, getTranslation } from './translation';
 
 const fn = jest.fn();
 
-beforeAll(() => {
+beforeEach(() => {
+   reset();
    onTranslationChange(fn);
    setTranslationPath('./__mocks__/i18n/');
 });
@@ -37,7 +39,32 @@ test('loads alternate translations from file', async () => {
    expect(config.translations.has(fr)).toBe(true);
 });
 
-test('retrieves translation literal for key', () => {
+test('retrieves translation literal for key', async () => {
+   await setLocale(Locale.French);
    const s = getTranslation(Label.Save);
    expect(s).toBe('French Save');
+});
+
+test('adds supplemental translation (such as for component)', async () => {
+   await addPath('./__mocks__/component');
+   const t1 = getTranslation(AddedLabel.Exit);
+   expect(t1).toBe('Exit');
+   // existing translations should be intact
+   const t2 = getTranslation(Label.Save);
+   expect(t2).toBe('Save');
+});
+
+test('supplemental translations are updated when locale changes', async () => {
+   await addPath('./__mocks__/component');
+
+   const t1 = getTranslation(AddedLabel.Exit);
+   expect(t1).toBe('Exit');
+
+   await setLocale(Locale.French);
+
+   const t2 = getTranslation(Label.Save);
+   expect(t2).toBe('French Save');
+
+   const t3 = getTranslation(AddedLabel.Exit);
+   expect(t3).toBe('French Exit');
 });

@@ -7,5 +7,6 @@ export { say } from './say';
 export { CurrencyCode, Locale, LocaleCurrency } from './constants';
 export {
    onLocaleChange as onTranslationChange,
-   initialize
+   initialize,
+   addPath
 } from './translation';

@@ -1,6 +1,11 @@
-import { is } from '@toba/tools';
+import { is, merge } from '@toba/tools';
 import { Locale } from './constants';
-import { config, setTranslations, Translations } from './config';
+import {
+   config,
+   setTranslations,
+   addTranslations,
+   Translations
+} from './config';
 
 /**
  * Method that responds to a locale change.
@@ -35,6 +40,7 @@ export async function setLocale(
    fallback: Locale = Locale.English
 ): Promise<boolean> {
    let translations: Translations | undefined;
+   const addPaths: string[] = [];
 
    if (!loaded.has(locale)) {
       const tx = await import(`${config.path}/${locale}`);
@@ -42,6 +48,25 @@ export async function setLocale(
       loaded.add(locale);
       config.ready = true;
    }
+
+   config.added.forEach((locales, path) => {
+      if (!locales.has(locale)) {
+         addPaths.push(path);
+      }
+   });
+
+   const additions: Translations[] = await Promise.all(
+      addPaths.map(async p => {
+         const tx = await import(`${p}/${locale}`);
+         config.added.get(p)!.add(locale);
+         return tx.default as Translations;
+      })
+   );
+
+   if (additions.length > 0) {
+      translations = merge(translations || {}, ...additions);
+   }
+
    setTranslations(locale, translations);
 
    // notify each listener that locale has changed
@@ -62,6 +87,28 @@ export async function initialize(): Promise<boolean> {
 }
 
 /**
+ * Add translations at given path and current locale to existing configuration.
+ */
+export async function addPath(path: string): Promise<boolean> {
+   const success = await initialize();
+
+   if (success) {
+      /** Set of already added locale translations for path */
+      const added = config.added.has(path)
+         ? config.added.get(path)!
+         : new Set<Locale>();
+
+      if (!added.has(config.locale)) {
+         const tx = await import(`${path}/${config.locale}`);
+         addTranslations(config.locale, tx.default);
+         added.add(config.locale);
+      }
+      config.added.set(path, added);
+   }
+   return success;
+}
+
+/**
  * Call method when locale changes.
  */
 export function onLocaleChange(fn: TranslationChange) {
@@ -78,4 +125,9 @@ export function getTranslation(key: string): string | undefined {
    }
    const tx = config.translations.get(config.locale);
    return is.value<Translations>(tx) ? tx[key] : undefined;
+}
+
+export function reset() {
+   loaded.clear();
+   listeners.clear();
 }

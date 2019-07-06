@@ -9,7 +9,7 @@ test('sets default configuration', () => {
 test('updates configuration', () => {
    const en = Locale.English;
    expect(config).toHaveProperty('locale', en);
-   expect(config).toHaveProperty('path', './locale');
+   expect(config).toHaveProperty('path', './i18n');
    expect(config.translations.has(en)).toBe(false);
 
    //setLocale(Locale.Spanish);
