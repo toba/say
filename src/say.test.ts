@@ -15,7 +15,7 @@ beforeAll(() => {
 beforeEach(async () => {
    reset();
    setBasePath('__mocks__/i18n/');
-   await addSource('thing1');
+   await addSource('thing1/?');
 });
 
 test('throws error if trying to parse unsupported type', () => {

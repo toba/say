@@ -15,7 +15,7 @@ beforeEach(async () => {
    reset();
    setBasePath('__mocks__/i18n/');
    onLocaleChange(fn);
-   await addSource('thing1');
+   await addSource('thing1/?.json');
 });
 
 // Babel may have trouble transforming this method for Jest
@@ -49,7 +49,7 @@ test('retrieves translation literal for key', async () => {
 });
 
 test('adds supplemental translation (such as for component)', async () => {
-   await addSource('thing2');
+   await addSource('thing2/?');
    const t1 = getTranslation('label.exit');
    expect(t1).toBe('Exit');
    // existing translations should be intact
@@ -58,7 +58,7 @@ test('adds supplemental translation (such as for component)', async () => {
 });
 
 test('supplemental translations are updated when locale changes', async () => {
-   await addSource('thing2');
+   await addSource('thing2/?');
 
    const t1 = getTranslation('label.exit');
    expect(t1).toBe('Exit');

@@ -24,14 +24,14 @@ const listeners: Set<LocaleHandler> = new Set();
 
 /**
  * Load `json` file as `Translations`.
- * @param path URL path to server file
+ * @param path URL path to server file with "?" where locale code should be inserted
  * @param locale Current locale
  */
 export async function loadSource(
    path: string,
    locale: Locale
 ): Promise<Translations> {
-   const res = await fetch(`${path}/${locale}.json`);
+   const res = await fetch(`${path.replace('?', locale)}.json`);
    return res.ok ? res.json() : undefined;
 }
 
@@ -83,7 +83,13 @@ export async function setLocale(
  * locale to existing configuration.
  */
 export async function addSource(path: string) {
-   const fullPath = config.basePath + path;
+   if (!path.includes('?')) {
+      throw Error(
+         `Invalid source path: ${path}. It must include at least one "?" to be substituted with the locale code.`
+      );
+   }
+
+   const fullPath = config.basePath + path.replace(/\.json$/, '');
 
    /** Set of already added locale translations for path */
    const added = config.sources.has(fullPath)
