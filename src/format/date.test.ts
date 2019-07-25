@@ -15,23 +15,17 @@ const d = new Date(Date.UTC(2012, 11, 20, 19, 0, 0, 0));
 
 test('defines options for each date format abbreviation', () => {
    expect(dateFormats).toHaveKeys(
-      ...Object.keys(DateFormat)
-         .map(key => DateFormat[key])
-         .filter(
-            code =>
-               ![
-                  DateFormat.ISO8601,
-                  DateFormat.RFC1123,
-                  DateFormat.Timestamp
-               ].includes(code)
-         )
+      DateFormat.Short,
+      DateFormat.ShortWithTime,
+      DateFormat.ShortWithExactTime,
+      DateFormat.Long,
+      DateFormat.LongWithTime,
+      DateFormat.LongWithExactTime
    );
 });
 
 test('defines options for each time format abbreviation', () => {
-   expect(timeFormats).toHaveKeys(
-      ...Object.keys(TimeFormat).map(key => TimeFormat[key])
-   );
+   expect(timeFormats).toHaveKeys(TimeFormat.Long, TimeFormat.Short);
 });
 
 test('formats date according to named style', () => {

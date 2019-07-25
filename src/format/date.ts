@@ -6,7 +6,7 @@ import { Locale } from '../constants';
  * Date format name representation within `Intl` library.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
  */
-export enum NameStyle {
+export const enum NameStyle {
    /**
     * Shortest representation
     * @example "D" for December
@@ -31,7 +31,7 @@ export enum NameStyle {
 /**
  * Date digit style within `Intl` library.
  */
-export enum DigitStyle {
+export const enum DigitStyle {
    /** Number is shown without leading zeros. */
    Numeric = 'numeric',
    /** Number is shown as two digits with leading zero as necessary. */
@@ -46,7 +46,7 @@ export enum DigitStyle {
  * "some text {key, date, monthDay} other"
  * "some text {key2, date, longWithTime} other"
  */
-export enum DateFormat {
+export const enum DateFormat {
    /** @example "2/20/2012" */
    Short = 'short',
 
@@ -95,7 +95,7 @@ export enum DateFormat {
  * "some text {key, time, short} other"
  * "some text {key2, time, long} other"
  */
-export enum TimeFormat {
+export const enum TimeFormat {
    /** @example "7:00 PM" */
    Short = 'short',
 

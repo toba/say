@@ -1,5 +1,5 @@
-import path from 'path';
 import '@toba/test';
+import path from 'path';
 import { mockFetch } from '@toba/test';
 import { config, reset } from './config';
 import { addSource, onLocaleChange, Locale, setBasePath } from './';
