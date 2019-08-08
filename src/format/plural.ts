@@ -13,7 +13,7 @@ import { Locale } from '../constants';
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/PluralRules/select
  * @see https://tc39.github.io/ecma402/#pluralrules-objects
  */
-export enum PluralType {
+export const enum PluralType {
    /**
     * Specific grammar for zero items (as in Arabic and Latvian).
     */

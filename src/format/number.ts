@@ -7,7 +7,7 @@ import { createConfigItem } from '@babel/core';
 /**
  * Possible values of `style` property on `Intl.NumberFormatOptions`.
  */
-export enum NumberStyle {
+export const enum NumberStyle {
    Decimal = 'decimal',
    /**
     * If the number style is "currency" then an additional parameter called
@@ -20,7 +20,7 @@ export enum NumberStyle {
 /**
  * Possible values of `currencyDisplay` property on `Intl.NumberFormatOptions`.
  */
-export enum CurrencyDisplay {
+export const enum CurrencyDisplay {
    /** Use a localized currency symbol such as € (the default) */
    Symbol = 'symbol',
    /** Use the ISO currency code */

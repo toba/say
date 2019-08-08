@@ -6,7 +6,7 @@ import { reset as resetTranslations } from './translation';
  * Basic types supported by standard internationalization library.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl
  */
-export enum BasicType {
+export const enum BasicType {
    Date = 'date',
    Number = 'number',
    Text = 'string'

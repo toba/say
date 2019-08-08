@@ -30,7 +30,7 @@ interface Interpolations {
  */
 type Placeholders = Map<string, [string, Formatter<AllowedType>]>;
 
-export enum ValueType {
+export const enum ValueType {
    Date = 'date',
    Time = 'time',
    Plural = 'plural',
