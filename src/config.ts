@@ -100,6 +100,10 @@ export function setTranslations(locale: Locale, tx?: Translations) {
    }
 }
 
+/**
+ * Add new set of translations to existing locale cache or create new locale
+ * entry with the translations.
+ */
 export function addTranslations(locale: Locale, tx: Translations) {
    if (config.translations.has(locale)) {
       const existing = config.translations.get(locale)!;

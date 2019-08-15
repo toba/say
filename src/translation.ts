@@ -23,7 +23,7 @@ const loaded: Set<Locale> = new Set();
 const listeners: Set<LocaleHandler> = new Set();
 
 /**
- * Load `json` file as `Translations`.
+ * Fetch `json` file as `Translations`.
  * @param path URL path to server file with "?" where locale code should be inserted
  * @param locale Current locale
  */
@@ -79,8 +79,8 @@ export async function setLocale(
 }
 
 /**
- * Add translations at given path (appended to `config.basePath`) and current
- * locale to existing configuration.
+ * Add translations at given URL path (appended to `config.basePath`) and
+ * current locale to existing in-memory configuration.
  */
 export async function addSource(path: string) {
    if (!path.includes('?')) {
