@@ -10,6 +10,7 @@
 # Toba Say
 
 http://targetveb.com/i18n-components-stenciljs.html
+https://dockyard.com/blog/2019/04/16/lazy-loading-custom-assets-with-stenciljs-part-1
 
 A translation and localization library designed to optimize developer and translator ergonomics.
 
