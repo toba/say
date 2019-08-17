@@ -1,7 +1,7 @@
 {
    "name": "@toba/say",
    "description": "Toba Internationalization",
-   "version": "1.0.2",
+   "version": "1.0.3",
    "private": false,
    "publishConfig": {
       "access": "public"
@@ -27,8 +27,8 @@
       "@toba/tools": "^6.7.4"
    },
    "devDependencies": {
-      "@toba/develop": "^6.6.1",
-      "@toba/test": "^4.1.3",
+      "@toba/develop": "^6.6.8",
+      "@toba/test": "^4.1.5",
       "intl": "^1.2.5"
    }
 }
