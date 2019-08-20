@@ -1,18 +1,22 @@
 {
    "name": "@toba/say",
    "description": "Toba Internationalization",
-   "version": "1.0.3",
+   "version": "1.0.5",
    "private": false,
    "publishConfig": {
       "access": "public"
    },
-   "main": "esm/index.js",
+   "main": "cjs/index.js",
+   "module": "esm/index.js",
    "types": "esm/index.d.ts",
    "files": [
-      "esm"
+      "esm",
+      "cjs"
    ],
    "scripts": {
-      "prepublishOnly": "./node_modules/.bin/tsc --project tsconfig.build.json",
+      "build:esm": "./node_modules/.bin/tsc --project ./node_modules/@toba/develop/tsconfig.esm.json",
+      "build:cjs": "./node_modules/.bin/tsc --project ./node_modules/@toba/develop/tsconfig.cjs-min.json",
+      "prepublishOnly": "npm run build:esm & npm run build:cjs",
       "test": "jest --coverage"
    },
    "license": "MIT",
@@ -21,13 +25,13 @@
       "url": "https://github.com/toba/say"
    },
    "engines": {
-      "node": ">= 10.0.0"
+      "node": ">= 12.0.0"
    },
    "dependencies": {
       "@toba/tools": "^6.7.4"
    },
    "devDependencies": {
-      "@toba/develop": "^6.6.8",
+      "@toba/develop": "^6.6.10",
       "@toba/test": "^4.1.5",
       "intl": "^1.2.5"
    }
