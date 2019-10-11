@@ -28,7 +28,7 @@
       "node": ">= 12.0.0"
    },
    "dependencies": {
-      "@toba/tools": "^6.7.5"
+      "@toba/tools": "^6.8.1"
    },
    "devDependencies": {
       "@toba/develop": "^6.6.12",
