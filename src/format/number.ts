@@ -2,7 +2,6 @@ import { is } from '@toba/tools';
 import { config } from '../config';
 import { Locale, CurrencyCode, LocaleCurrency } from '../';
 import { Formatter } from '../say';
-import { createConfigItem } from '@babel/core';
 
 /**
  * Possible values of `style` property on `Intl.NumberFormatOptions`.
