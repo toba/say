@@ -1,6 +1,6 @@
-import { is } from '@toba/tools';
-import { Formatter } from '../say';
-import { Locale } from '../constants';
+import { is } from '@toba/tools'
+import { Formatter } from '../say'
+import { Locale } from '../constants'
 
 /**
  * Date format name representation within `Intl` library.
@@ -113,12 +113,12 @@ const defaultOptions: Intl.DateTimeFormatOptions = {
    minute: undefined,
    second: undefined,
    timeZoneName: undefined
-};
+}
 
 /**
  * Named option groups specifying the format for each element of a date or time.
  */
-type FormatOptions = Map<string, Intl.DateTimeFormatOptions>;
+type FormatOptions = Map<string, Intl.DateTimeFormatOptions>
 
 /**
  * Time format configurations.
@@ -141,7 +141,7 @@ export const timeFormats: FormatOptions = new Map([
          second: DigitStyle.TwoDigit
       }
    ]
-]);
+])
 
 /**
  * Date format configurations.
@@ -246,7 +246,7 @@ export const dateFormats: FormatOptions = new Map([
          month: NameStyle.Long
       }
    ]
-]);
+])
 
 /**
  * Return function to format date/time per given format options.
@@ -257,40 +257,40 @@ function makeFormatter<T extends DateFormat | TimeFormat | string>(
    formatList: FormatOptions,
    format?: T
 ): Formatter<Date> {
-   let options: Intl.DateTimeFormatOptions | undefined;
+   let options: Intl.DateTimeFormatOptions | undefined
 
    if (!is.empty(format)) {
-      const f = format.toLowerCase();
+      const f = format.toLowerCase()
 
       if (formatList.has(f)) {
          // use predefined custom format
-         options = formatList.get(f);
+         options = formatList.get(f)
       } else {
          switch (f) {
             // use format built into date object (or fail)
             case DateFormat.ISO8601:
-               return (d: Date) => d.toISOString();
+               return (d: Date) => d.toISOString()
             case DateFormat.RFC1123:
-               return (d: Date) => d.toUTCString();
+               return (d: Date) => d.toUTCString()
             case DateFormat.Timestamp:
-               return (d: Date) => d.getTime().toString();
+               return (d: Date) => d.getTime().toString()
             default:
-               throw Error(`Date/time format "${format}" is not recognized`);
+               throw Error(`Date/time format "${format}" is not recognized`)
          }
       }
    }
    // default behavior uses locale default formatting
-   return (d: Date, locale: Locale) => d.toLocaleString(locale, options);
+   return (d: Date, locale: Locale) => d.toLocaleString(locale, options)
 }
 
 /**
  * Lookup format and build function.
  */
 export const formatDate = (format?: DateFormat | string): Formatter<Date> =>
-   makeFormatter(dateFormats, format);
+   makeFormatter(dateFormats, format)
 
 /**
  * Lookup format and build function.
  */
 export const formatTime = (format?: DateFormat | string): Formatter<Date> =>
-   makeFormatter(timeFormats, format);
+   makeFormatter(timeFormats, format)

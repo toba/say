@@ -1,7 +1,7 @@
-import { Formatter } from '../say';
-import { Locale } from '../constants';
+import { Formatter } from '../say'
+import { Locale } from '../constants'
 
-const re = /(\w+)[\r\n\s]*{([^}]+)}/g;
+const re = /(\w+)[\r\n\s]*{([^}]+)}/g
 
 /**
  * Create map of selection options from ICU format string.
@@ -14,15 +14,15 @@ const re = /(\w+)[\r\n\s]*{([^}]+)}/g;
  *  } will respond shortly.
  */
 export function parse(format: string): Map<string, string> {
-   re.lastIndex = 0;
-   const options: Map<string, string> = new Map();
-   let matches: RegExpExecArray | null;
+   re.lastIndex = 0
+   const options: Map<string, string> = new Map()
+   let matches: RegExpExecArray | null
 
    while ((matches = re.exec(format)) !== null) {
-      const [, type, text] = matches;
-      options.set(type, text);
+      const [, type, text] = matches
+      options.set(type, text)
    }
-   return options;
+   return options
 }
 
 /**
@@ -36,14 +36,13 @@ export function parse(format: string): Map<string, string> {
  *  } will respond shortly.
  */
 export function formatSelect(format: string): Formatter<string> {
-   const options = parse(format);
+   const options = parse(format)
 
    return (key: string, _locale: Locale) => {
       if (options.has(key)) {
-         return options.get(key)!;
-      } else {
-         // TODO: throw error?
-         return '';
+         return options.get(key)!
       }
-   };
+      // TODO: throw error?
+      return ''
+   }
 }

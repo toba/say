@@ -1,22 +1,22 @@
-import { is } from '@toba/tools';
-import { AllowedType, config } from './config';
-import { formatNumber } from './format/number';
-import { formatDate, formatTime } from './format/date';
-import { formatPlural } from './format/plural';
-import { Locale } from './constants';
-import { getTranslation } from './translation';
-import { formatSelect } from './format/select';
+import { is } from '@toba/tools'
+import { AllowedType, config } from './config'
+import { formatNumber } from './format/number'
+import { formatDate, formatTime } from './format/date'
+import { formatPlural } from './format/plural'
+import { Locale } from './constants'
+import { getTranslation } from './translation'
+import { formatSelect } from './format/select'
 
 /**
  * Method that translates a value to a given locale.
  */
-export type Formatter<T> = (value: T, locale: Locale | Locale[]) => string;
+export type Formatter<T> = (value: T, locale: Locale | Locale[]) => string
 
 /**
  * Values supplied to replace placeholders in translated string literal.
  */
 interface Interpolations {
-   [key: string]: AllowedType;
+   [key: string]: AllowedType
 }
 
 /**
@@ -28,7 +28,7 @@ interface Interpolations {
  * "text {key, type, format} more text"
  * => Map<'key', ['{key, type, format}', parsePlaceholder(type, format)]>
  */
-type Placeholders = Map<string, [string, Formatter<AllowedType>]>;
+type Placeholders = Map<string, [string, Formatter<AllowedType>]>
 
 export const enum ValueType {
    Date = 'date',
@@ -46,7 +46,7 @@ export const enum ValueType {
  * Map literal translation strings to their deconstructed, keyed placeholders
  * with localization functions.
  */
-const cache: Map<string, Placeholders | null> = new Map();
+const cache: Map<string, Placeholders | null> = new Map()
 
 /**
  * Pattern matching a standard ICU placeholder.
@@ -55,14 +55,14 @@ const cache: Map<string, Placeholders | null> = new Map();
  * {key2}
  * {key3, type3}
  */
-const re = /{(\w+)(,\s+(\w+)(,\s+(\w+))?)?}/g;
+const re = /{(\w+)(,\s+(\w+)(,\s+(\w+))?)?}/g
 
 /**
  * Clear cached translation and localization functions. Cache will be lazily
  * rebuilt in `getPlaceholders()`.
  */
 export function resetCache() {
-   cache.clear();
+   cache.clear()
 }
 
 /**
@@ -75,29 +75,31 @@ export function makePlaceholder(
    format?: string
 ): Formatter<AllowedType> {
    if (is.empty(type)) {
-      return (v: string) => v;
+      return (v: string) => v
    }
    switch (type) {
       case ValueType.Date:
-         return formatDate(format);
+         return formatDate(format)
       case ValueType.Number:
-         return formatNumber(format);
+         return formatNumber(format)
       case ValueType.Plural:
          if (is.value<string>(format)) {
-            return formatPlural(format);
+            return formatPlural(format)
          }
          // TODO: verify break since this previously allowed fall-through
-         break;
+         break
       case ValueType.Select:
          if (is.value<string>(format)) {
-            return formatSelect(format);
+            return formatSelect(format)
          }
          // TODO: verify break since this previously allowed fall-through
-         break;
+         break
       case ValueType.Time:
-         return formatTime(format);
+         return formatTime(format)
+      default:
+         break
    }
-   throw Error(`Unsupported type "${type}" and format "${format}"`);
+   throw Error(`Unsupported type "${type}" and format "${format}"`)
 }
 
 /**
@@ -116,24 +118,23 @@ export function getPlaceholders(
    literal: string
 ): Placeholders | null {
    if (cache.has(key)) {
-      return cache.get(key)!;
+      return cache.get(key)!
    }
-   re.lastIndex = 0;
-   const ph: Placeholders = new Map();
-   let matches: RegExpExecArray | null;
+   re.lastIndex = 0
+   const ph: Placeholders = new Map()
+   let matches: RegExpExecArray | null
 
    while ((matches = re.exec(literal)) !== null) {
-      const [placeholder, phKey, , type, , format] = matches;
-      const formatter = makePlaceholder(type, format);
-      ph.set(phKey, [placeholder, formatter]);
+      const [placeholder, phKey, , type, , format] = matches
+      const formatter = makePlaceholder(type, format)
+      ph.set(phKey, [placeholder, formatter])
    }
    if (ph.size > 0) {
-      cache.set(key, ph);
-      return ph;
-   } else {
-      cache.set(key, null);
-      return null;
+      cache.set(key, ph)
+      return ph
    }
+   cache.set(key, null)
+   return null
 }
 
 /**
@@ -142,30 +143,27 @@ export function getPlaceholders(
  * @param values Optional values to replace placeholders in translated text
  */
 export function say(key: string, values?: Interpolations): string | undefined {
-   let literal = getTranslation(key);
+   let literal = getTranslation(key)
 
-   if (literal === undefined) {
-      return undefined;
-   }
-   const placeholders = getPlaceholders(key, literal);
+   if (literal === undefined) return undefined
+
+   const placeholders = getPlaceholders(key, literal)
 
    if (placeholders !== null) {
-      if (values === undefined) {
-         // TODO: show some kind of error
-         return literal;
-      }
+      // TODO: show some kind of error
+      if (values === undefined) return literal
 
       // iterate values and invoke placeholder methods
       placeholders.forEach((formatter, key) => {
-         const v = values[key];
-         const ph = formatter[0];
-         const fn = formatter[1];
-         const text = fn(v, [config.locale, config.fallbackLocale]);
+         const v = values[key]
+         const ph = formatter[0]
+         const fn = formatter[1]
+         const text = fn(v, [config.locale, config.fallbackLocale])
 
-         literal = literal!.replace(ph, text);
-      });
+         literal = literal!.replace(ph, text)
+      })
    }
-   return literal;
+   return literal
 }
 
 // test

@@ -112,4 +112,4 @@ export const LocaleCurrency: { [key: string]: CurrencyCode } = {
    [Locale.EnglishInCanada]: CurrencyCode.NewZealandDollar,
    [Locale.Japanese]: CurrencyCode.Yen,
    [Locale.Russian]: CurrencyCode.Ruble
-};
+}

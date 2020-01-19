@@ -1,7 +1,7 @@
-import { is } from '@toba/tools';
-import { config } from '../config';
-import { Locale, CurrencyCode, LocaleCurrency } from '../';
-import { Formatter } from '../say';
+import { is } from '@toba/tools'
+import { config } from '../config'
+import { Locale, CurrencyCode, LocaleCurrency } from '../'
+import { Formatter } from '../say'
 
 /**
  * Possible values of `style` property on `Intl.NumberFormatOptions`.
@@ -28,12 +28,12 @@ export const enum CurrencyDisplay {
    Name = 'name'
 }
 
-type FormatOptions = Map<string, Intl.NumberFormatOptions>;
+type FormatOptions = Map<string, Intl.NumberFormatOptions>
 
 const defaultOptions: Intl.NumberFormatOptions = {
    minimumFractionDigits: 0,
    maximumFractionDigits: 3
-};
+}
 
 /**
  * Number format configurations.
@@ -47,45 +47,45 @@ export const numberFormats: FormatOptions = new Map([
          style: NumberStyle.Percent
       }
    ]
-]);
+])
 
 /**
  * Regular expression to match all supported currency codes.
  * @example
  * /^(USD|EUR)$/i
  */
-let currencyPattern: RegExp;
-let patternReady = false;
+let currencyPattern: RegExp
+let patternReady = false
 
 export const isCurrencyCode = (code?: string): code is string => {
    if (!patternReady) {
       currencyPattern = new RegExp(
          `^(${Object.values(CurrencyCode).join('|')})$`,
          'i'
-      );
-      patternReady = true;
+      )
+      patternReady = true
    }
-   return code === undefined ? false : currencyPattern.test(code);
-};
+   return code === undefined ? false : currencyPattern.test(code)
+}
 
 const inferCurrency = (locale: Locale): CurrencyCode =>
    LocaleCurrency.hasOwnProperty(locale)
       ? LocaleCurrency[locale]
-      : config.fallbackCurrency;
+      : config.fallbackCurrency
 
 /**
  * Lookup style and build function.
  */
 export function formatNumber(format?: string): Formatter<number> {
-   let options = defaultOptions;
+   let options = defaultOptions
 
    if (is.numeric(format)) {
-      const places: number = parseInt(format);
+      const places: number = parseInt(format, 10)
       options = {
          ...options,
          minimumFractionDigits: places,
          maximumFractionDigits: places
-      };
+      }
    } else if (isCurrencyCode(format)) {
       options = {
          ...options,
@@ -93,7 +93,7 @@ export function formatNumber(format?: string): Formatter<number> {
          currency: format,
          minimumFractionDigits: 2,
          maximumFractionDigits: 2
-      };
+      }
    } else if (format === NumberStyle.Currency) {
       options = {
          ...options,
@@ -101,13 +101,13 @@ export function formatNumber(format?: string): Formatter<number> {
          currency: inferCurrency(config.locale),
          minimumFractionDigits: 2,
          maximumFractionDigits: 2
-      };
+      }
    } else if (!is.empty(format)) {
       if (numberFormats.has(format)) {
-         options = numberFormats.get(format)!;
+         options = numberFormats.get(format)!
       } else {
-         throw Error(`Number format "${format}" is not recognized`);
+         throw Error(`Number format "${format}" is not recognized`)
       }
    }
-   return (n: number, locale: Locale) => n.toLocaleString(locale, options);
+   return (n: number, locale: Locale) => n.toLocaleString(locale, options)
 }

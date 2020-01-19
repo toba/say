@@ -1,6 +1,6 @@
-import { merge } from '@toba/tools';
-import { Locale, CurrencyCode } from './constants';
-import { reset as resetTranslations } from './translation';
+import { merge } from '@toba/tools'
+import { Locale, CurrencyCode } from './constants'
+import { reset as resetTranslations } from './translation'
 
 /**
  * Basic types supported by standard internationalization library.
@@ -20,44 +20,44 @@ export const enum BasicType {
  * }
  */
 export interface Translations {
-   [key: string]: string;
+   [key: string]: string
 }
 
 /**
  * Types supported by internationalization library.
  */
-export type AllowedType = string | number | Date;
+export type AllowedType = string | number | Date
 
-export type StringFormat = any;
+export type StringFormat = any
 
 export interface Configuration {
    /**
     * BCP 47 language tag or tags.
     */
-   locale: Locale;
+   locale: Locale
    /**
     * Translation locale to use when there is no translation for the preferred
     * locale.
     */
-   fallbackLocale: Locale;
+   fallbackLocale: Locale
    /**
     * Currency to use if not specified in format string (first choice) and no
     * match to the current locale is defined (second choice) in `constants`.
     */
-   fallbackCurrency: CurrencyCode;
+   fallbackCurrency: CurrencyCode
    /**
     * Combined translation content from sources mapped to locale.
     */
-   translations: Map<Locale, Translations>;
+   translations: Map<Locale, Translations>
    /**
     * Path prepended to all added source paths (must include trailing slash).
     */
-   basePath: string;
+   basePath: string
    /**
     * Translations file paths mapped to which locales have beeen loaded from
     * that source.
     */
-   sources: Map<string, Set<Locale>>;
+   sources: Map<string, Set<Locale>>
 }
 
 const defaultConfig = (): Configuration => ({
@@ -67,17 +67,17 @@ const defaultConfig = (): Configuration => ({
    basePath: '/assets/i18n/',
    translations: new Map(),
    sources: new Map()
-});
+})
 
 /**
  * Global configuration cache that should behave as a singleton.
  */
-export let config = defaultConfig();
+export let config = defaultConfig()
 
 export function reset(): Configuration {
-   config = defaultConfig();
-   resetTranslations();
-   return config;
+   config = defaultConfig()
+   resetTranslations()
+   return config
 }
 
 /**
@@ -85,8 +85,8 @@ export function reset(): Configuration {
  * @param path Path prepended to all source paths
  */
 export function setBasePath(path: string): Configuration {
-   config.basePath = path.replace(/\/+$/, '') + '/';
-   return config;
+   config.basePath = path.replace(/\/+$/, '') + '/'
+   return config
 }
 
 /**
@@ -94,10 +94,8 @@ export function setBasePath(path: string): Configuration {
  * @param tx Optional translations for the new locale
  */
 export function setTranslations(locale: Locale, tx?: Translations) {
-   config.locale = locale;
-   if (tx !== undefined) {
-      config.translations.set(locale, tx);
-   }
+   config.locale = locale
+   if (tx !== undefined) config.translations.set(locale, tx)
 }
 
 /**
@@ -106,10 +104,10 @@ export function setTranslations(locale: Locale, tx?: Translations) {
  */
 export function addTranslations(locale: Locale, tx: Translations) {
    if (config.translations.has(locale)) {
-      const existing = config.translations.get(locale)!;
-      const merged = merge(existing, tx);
-      config.translations.set(locale, merged);
+      const existing = config.translations.get(locale)!
+      const merged = merge(existing, tx)
+      config.translations.set(locale, merged)
    } else {
-      setTranslations(locale, tx);
+      setTranslations(locale, tx)
    }
 }

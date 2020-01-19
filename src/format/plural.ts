@@ -1,5 +1,5 @@
-import { Formatter } from '../say';
-import { Locale } from '../constants';
+import { Formatter } from '../say'
+import { Locale } from '../constants'
 
 /**
  * Types of plurals supported in different languages.
@@ -51,8 +51,8 @@ export const enum PluralType {
    Other = 'other'
 }
 
-const re = /(zero|one|two|few|many|other|=\d+)[\r\n\s]*{([^}]+)}/g;
-const ruleCache: Map<Locale, Intl.PluralRules> = new Map();
+const re = /(zero|one|two|few|many|other|=\d+)[\r\n\s]*{([^}]+)}/g
+const ruleCache: Map<Locale, Intl.PluralRules> = new Map()
 
 /**
  * Parse map of plural rules from ICU format string.
@@ -65,15 +65,15 @@ const ruleCache: Map<Locale, Intl.PluralRules> = new Map();
  * }
  */
 export function parse(format: string): Map<PluralType | string, string> {
-   re.lastIndex = 0;
-   const plurals: Map<PluralType | string, string> = new Map();
-   let matches: RegExpExecArray | null;
+   re.lastIndex = 0
+   const plurals: Map<PluralType | string, string> = new Map()
+   let matches: RegExpExecArray | null
 
    while ((matches = re.exec(format)) !== null) {
-      const [, type, text] = matches;
-      plurals.set(type, text);
+      const [, type, text] = matches
+      plurals.set(type, text)
    }
-   return plurals;
+   return plurals
 }
 
 /**
@@ -84,11 +84,11 @@ function getRules(
    options?: Intl.PluralRulesOptions
 ): Intl.PluralRules {
    if (ruleCache.has(locale)) {
-      return ruleCache.get(locale)!;
+      return ruleCache.get(locale)!
    }
-   const rules = new Intl.PluralRules(locale, options);
-   ruleCache.set(locale, rules);
-   return rules;
+   const rules = new Intl.PluralRules(locale, options)
+   ruleCache.set(locale, rules)
+   return rules
 }
 
 /**
@@ -102,22 +102,22 @@ function getRules(
  * }
  */
 export function formatPlural(format: string): Formatter<number> {
-   const plurals = parse(format);
+   const plurals = parse(format)
 
    return (count: number, locale: Locale) => {
-      const exact = '=' + count;
-      let text: string | undefined;
+      const exact = '=' + count
+      let text: string | undefined
 
       if (plurals.has(exact)) {
-         text = plurals.get(exact)!;
+         text = plurals.get(exact)!
       } else {
-         const rules = getRules(locale);
-         const type = rules.select(count);
-         text = plurals.get(type);
+         const rules = getRules(locale)
+         const type = rules.select(count)
+         text = plurals.get(type)
       }
       // TODO: fallback?
       return text !== undefined
          ? text.replace('#', count.toLocaleString(locale))
-         : '';
-   };
+         : ''
+   }
 }
