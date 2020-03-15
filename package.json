@@ -28,11 +28,11 @@
       "node": ">= 12.0.0"
    },
    "dependencies": {
-      "@toba/tools": "^6.13.4"
+      "@toba/tools": "^6.13.5"
    },
    "devDependencies": {
-      "@toba/develop": "^6.8.0",
-      "@toba/test": "^4.1.18",
+      "@toba/develop": "^6.8.1",
+      "@toba/test": "^4.2.1",
       "intl": "^1.2.5"
    }
 }
