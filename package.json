@@ -31,8 +31,8 @@
       "@toba/tools": "^6.13.5"
    },
    "devDependencies": {
-      "@toba/develop": "^6.8.1",
-      "@toba/test": "^4.2.1",
+      "@toba/develop": "^6.8.2",
+      "@toba/test": "^4.2.2",
       "intl": "^1.2.5"
    }
 }

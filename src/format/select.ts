@@ -39,9 +39,8 @@ export function formatSelect(format: string): Formatter<string> {
    const options = parse(format)
 
    return (key: string, _locale: Locale) => {
-      if (options.has(key)) {
-         return options.get(key)!
-      }
+      if (options.has(key)) return options.get(key)!
+
       // TODO: throw error?
       return ''
    }
